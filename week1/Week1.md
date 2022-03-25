@@ -10,7 +10,11 @@ Trainable Beer Pouring Robot
   - button to start pouring
   - Flash Memory / SD card to store flow rates
   - LED/LCD Display to indicate status (pouring / recording / complete)
-- Hardware Block Diagarm
+
+**Hardware Block Diagarm**
 ![](HardwareBlockDiagram.png)
-- Software Hiearchy Diagram
+
+**Software Hiearchy Diagram**
+
+
 ![](SoftwareHierarchy.png)
