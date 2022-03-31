@@ -27,7 +27,7 @@ Some interesting peripherals for each board
 * MEMs motion sensor with 3-axis digital output gyroscope (I2C / SPI Interface)
 * MEMs package with 2 sensors (I2C Interface)
    * 3D digital linear accleration sensor 
-   * 3D digital magnetic sensor
+   * 3D digital magnetic sensor (eCompass)
 
 
 ## ADC Interfaces
@@ -35,35 +35,27 @@ Some interesting peripherals for each board
 #### Arduino MKZero
    * 8-, 10- or 12-bit resolution
    * Up to 350,000 samples per second (350ksps)
-   * Differential and single-ended inputs
-      * Up to 32 analog input
-      * 25 positive and 10 negative, including internal and external
-   * Five internal inputs
-      * Bandgap
-      * Temperature sensor
-      * DAC
-      * Scaled core supply
-      * Scaled I/O supply
-* 1/2x to 16x gain
-* Single, continuous and pin-scan conversion options
-* Windowing monitor with selectable channel
-* Conversion range:
-   *  Vref [1v to VDDANA - 0.6V] 
-   * ADCx * GAIN [0V to -Vref ]
-* Built-in internal reference and external reference options
-   * Four bits for reference selection
-* Event-triggered conversion for accurate timing (one event input)
-* Optional DMA transfer of conversion result
-* Hardware gain and offset compensation
-* Averaging and oversampling with decimation to support, up to 16-bit result
-* Selectable sampling time
+   * Optional DMA transfer of conversion result
+   * Averaging and oversampling with decimation to support, up to 16-bit result
+   * Selectable sampling time
 
 #### STM32 F3 Discovery
 * 2 ADC Interfaces (ADC1 - Master / ADC2)
    * 10 channels on ADC1
    * 12 channels on ADC2
-
+* Self-calibration
 
 ## Application Notes
 
-* STM32 F3 Discovery
+* [STM32 F3 Discovery eCompass Application Notes](https://www.st.com/resource/en/application_note/an4825-ultracompact-highperformance-ecompass-module-based-on-the-lsm303agr-stmicroelectronics.pdf)
+   * This document details on how to operate the accelerometer and magnetomer
+
+* Arduio MKRZero
+ * Since this is more of a consumer end product I found the following libraries with supported sample applications:
+   * [Arduino Sound Library](https://www.arduino.cc/en/Reference/ArduinoSound)
+      * Clap Detector
+      * Whistle Detector
+      * Amplitude Serial Plotter
+
+   * [Arduino Low Power Library](https://www.arduino.cc/en/Reference/ArduinoLowPower) - Demonstrate how to wake up board from an external source
+ 
