@@ -135,9 +135,10 @@ void SystemClock_Config(void)
   }
 }
 
-void EXTI0_IRQHandler(uint16_t GPIO_Pin)
+// copied from Cube IDE Generated code
+void EXTI0_IRQHandler(void)
 {
-    EXTI0_Callback(USER_BUTTON_PIN);
+    HAL_GPIO_EXTI_IRQHandler(USER_BUTTON_PIN);
 }
 
 uint32_t previousMillis = 0;
@@ -145,13 +146,15 @@ uint32_t currentMillis = 0;
 uint32_t counterOutside = 0;
 uint32_t counterInside = 0;
 
-void EXTI0_Callback(uint16_t GPIO_Pin)
+
+// programmer provided callback
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     counterOutside++;
     currentMillis = HAL_GetTick();
 
-    if (GPIO_Pin == USER_BUTTON_PIN) {
-        __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);
+      if(GPIO_Pin == USER_BUTTON_PIN) {
+ 
         counterInside++;
         HAL_GPIO_WritePin(LED_GPIO_PORT, GREEN_LED_PIN, GPIO_PIN_SET);
         HAL_GPIO_WritePin(LED_GPIO_PORT, RED_LED_PIN, GPIO_PIN_SET);
