@@ -7,7 +7,7 @@ Build Environment:
  - STMCubeMX to generate supporting code for a interrupt routine
 
 # Building the Code with Platformio
-In order to get the interrupt working, I used STMCube IDE to configure the EXTI0 Interrupt then copied the following functions:
+In order to get the interrupt working, I used STMCube IDE to configure the EXTI0 Interrupt then copied the following functions to main.c in Blinky project:
 * SystemClock_Config();
 * MX_NVIC_Init();
 * EXTI0_IRQHandler(void)
