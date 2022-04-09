@@ -31,34 +31,7 @@ int main(void) {
 
     while (1)
     {
-
-        if (!interruptGenerated) {
-            if (counter % 2 == 0) {
-                HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN);
-            } else {
-                HAL_GPIO_TogglePin(LED_GPIO_PORT, RED_LED_PIN); 
-            }
-            
-            HAL_Delay(1000);
-            counter++;
-        } else {
-            HAL_Delay(1000);
-            interruptGenerated = 0;
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, RED_LED_PIN); 
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN); 
-            HAL_Delay(250);
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, RED_LED_PIN); 
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN); 
-            HAL_Delay(250);
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, RED_LED_PIN); 
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN); 
-            HAL_Delay(250);
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, RED_LED_PIN); 
-            HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN); 
-            HAL_Delay(250);
-        }   
-
-       
+      // no code here is as the interrupt turns the led on/off       
     }
     
     return 0;
@@ -91,7 +64,7 @@ void SysTick_Handler(void) {
   HAL_IncTick();
 }
 
-
+// copied from Cube IDE Generated code
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -156,15 +129,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       if(GPIO_Pin == USER_BUTTON_PIN) {
  
         counterInside++;
-        HAL_GPIO_WritePin(LED_GPIO_PORT, GREEN_LED_PIN, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(LED_GPIO_PORT, RED_LED_PIN, GPIO_PIN_SET);
+        HAL_GPIO_TogglePin(LED_GPIO_PORT, GREEN_LED_PIN);
         previousMillis = currentMillis;
         interruptGenerated = 1;
     }
    
 }
 
-
+// copied from Cube IDE Generated code
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
@@ -176,6 +148,7 @@ void Error_Handler(void)
   /* USER CODE END Error_Handler_Debug */
 }
 
+// copied from Cube IDE Generated code
 static void MX_NVIC_Init(void)
 {
   /* EXTI0_IRQn interrupt configuration */
