@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "gyro.h": "c"
+        "gyro.h": "c",
+        "stm32f429i_discovery_gyroscope.h": "c",
+        "l3gd20.h": "c"
     }
 }
