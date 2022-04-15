@@ -2,19 +2,26 @@
 @startuml
 scale 600 width
 
-[*] -> State1
-State1 --> State2 : Succeeded
-State1 --> [*] : Aborted
-State2 --> State3 : Succeeded
-State2 --> [*] : Aborted
-state State3 {
-  state "Accumulate Enough Data\nLong State Name" as long1
-  long1 : Just a test
-  [*] --> long1
-  long1 --> long1 : New Data
-  long1 --> ProcessData : Enough Data
-}
-State3 --> State3 : Failed
-State3 --> [*] : Succeeded / Save Result
-State3 --> [*] : Aborted
-@enduml
+[*] -> START
+START: Show Title
+START --> START_GAME : Button Press
+START_GAME: Reset Sequence
+START_GAME: Select 1st Element
+START_GAME --> PLAY_SEQUENCE
+PLAY_SEQUENCE: Play Sequence
+PLAY_SEQUENCE-> WAIT
+WAIT: Reset Timer
+WAIT --> GAME_OVER : Timer Expired
+GAME_OVER: Show Score
+GAME_OVER: Delay
+GAME_OVER-> START
+WAIT-->INCREMENT_SEQUENCE_INDEX: Gyro direction matched current index
+WAIT-->INCREMENT_SEQUENCE_SIZE: Gyro matched last index
+INCREMENT_SEQUENCE_INDEX: Increment Sequence Index
+INCREMENT_SEQUENCE_INDEX-> WAIT: Not Last index
+INCREMENT_SEQUENCE_INDEX--> INCREMENT_SEQUENCE_SIZE: Last index
+INCREMENT_SEQUENCE_SIZE: increment sequence index
+INCREMENT_SEQUENCE_SIZE: select next element
+INCREMENT_SEQUENCE_SIZE-> PLAY_SEQUENCE
+
+@end_uml
