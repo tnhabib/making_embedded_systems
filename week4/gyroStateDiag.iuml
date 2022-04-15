@@ -15,7 +15,7 @@ WAIT --> GAME_OVER : Timer Expired
 GAME_OVER: Show Score
 GAME_OVER: Delay
 GAME_OVER-> START
-WAIT-->INCREMENT_SEQUENCE_INDEX: Gyro direction matched current index
+WAIT-->INCREMENT_SEQUENCE_INDEX: "Gyro direction matched\n current index"
 WAIT-->INCREMENT_SEQUENCE_SIZE: Gyro matched last index
 INCREMENT_SEQUENCE_INDEX: Increment Sequence Index
 INCREMENT_SEQUENCE_INDEX-> WAIT: Not Last index
