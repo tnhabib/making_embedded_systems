@@ -10,13 +10,11 @@ void GyroInit();
 
 int main(void) {
  
-    uint8_t buf[100];
-    uint8_t buf_1[100];
-    uint8_t buf_2[100];
-    float xGyro;
-    float yGyro;
-    float zGyro;
-    float xyzGyro[3];
+    uint8_t buf[1000];
+    uint8_t buf_1[1000];
+    uint8_t buf_2[1000];
+ 
+    double xyzGyro[3];
     
   
 
@@ -44,12 +42,10 @@ int main(void) {
     {
   
       I3G4250D_ReadXYZAngRate(xyzGyro);
-      xGyro = xyzGyro[0];
-      yGyro = xyzGyro[1];
-      zGyro = xyzGyro[2];
-      snprintf((char *)buf, sizeof(buf), "X: %d",(int) (xGyro));
-      snprintf((char *)buf_1,sizeof(buf_1),  "Y: %d", (int) (yGyro));
-      snprintf((char *)buf_2, sizeof(buf_2), "Z: %d",(int) (zGyro));
+     
+      sprintf(buf,  "X: %4.2f", xyzGyro[0]);
+      sprintf(buf_1,  "Y: %4.2f", xyzGyro[1]);
+      sprintf(buf_2,  "Z: %4.2f", xyzGyro[2]);
       
       BSP_LCD_DisplayStringAtLine(0, buf);
       BSP_LCD_DisplayStringAtLine(1, buf_1);
@@ -63,9 +59,12 @@ int main(void) {
 
 
 void GyroInit() {
+
+  
     GYRO_InitTypeDef         Gyro_InitStructure;
     GYRO_FilterConfigTypeDef Gyro_FilterStructure = {0,0};
     uint16_t ctrl = 0x0000;
+
 
     Gyro_InitStructure.Power_Mode       = I3G4250D_MODE_ACTIVE;
     Gyro_InitStructure.Output_DataRate  = I3G4250D_OUTPUT_DATARATE_1;
@@ -73,7 +72,7 @@ void GyroInit() {
     Gyro_InitStructure.Band_Width       = I3G4250D_BANDWIDTH_4;
     Gyro_InitStructure.BlockData_Update = I3G4250D_BlockDataUpdate_Continous;
     Gyro_InitStructure.Endianness       = I3G4250D_BLE_LSB;
-    Gyro_InitStructure.Full_Scale       = I3G4250D_FULLSCALE_500;
+    Gyro_InitStructure.Full_Scale       = I3G4250D_FULLSCALE_245;
 
     /* Configure MEMS: data rate, power mode, full scale and axes */
     ctrl = (uint16_t) (Gyro_InitStructure.Power_Mode  | Gyro_InitStructure.Output_DataRate | \
@@ -92,6 +91,7 @@ void GyroInit() {
     I3G4250D_FilterConfig(ctrl);
 
     I3G4250D_FilterCmd(I3G4250D_HIGHPASSFILTER_ENABLE);
+    
 
 }
 
