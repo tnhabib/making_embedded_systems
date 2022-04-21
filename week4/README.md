@@ -1,5 +1,14 @@
 # Gyro Simon State Documentation
+# Overview
 
+For the final project , I will be implementing a motion simon says game that uses the Gyro on the STMF Discovery Board. 
+
+Peripherals used:
+ * LCD Display - to draw and display sequences to repeat, display score
+ * Button - to start the game
+ * Gyro Sensor (I3G4250D) to capture input (lean left, lean right, lean up, lean down) to match sequence as it is presented and grows
+ * LED Matrix - if time permits this will replace the LED Display
+ 
 ## State Diagram
 ![your-UML-diagram-name](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/tnhabib/making_embedded_systems/master/week4/gyroStateDiag.iuml)
 
