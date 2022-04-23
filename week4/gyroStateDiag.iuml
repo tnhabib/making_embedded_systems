@@ -11,7 +11,7 @@ START_GAME --> PLAY_SEQUENCE
 PLAY_SEQUENCE: Play Sequence
 PLAY_SEQUENCE-> WAIT
 WAIT: Reset Timer
-WAIT --> GAME_OVER : "Input did not match\nTimer Expired"
+WAIT --> GAME_OVER : Input did not match / \nTime Expired
 GAME_OVER: Show Score
 GAME_OVER: Delay
 GAME_OVER-> START
