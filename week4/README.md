@@ -1,7 +1,7 @@
 # Gyro Simon State Documentation
 # Overview
 
-For the final project , I will be implementing a motion simon says game that uses the Gyro on the STMF Discovery Board. 
+For the final project , I will be implementing a motion simon says game that uses the Gyro on the STMF4 Discovery Board. 
 
 Peripherals used:
  * LCD Display - to draw and display sequences to repeat, display score
