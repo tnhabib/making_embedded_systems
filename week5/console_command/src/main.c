@@ -13,8 +13,8 @@ char Message[] = "Write anything on Serial Terminal\r\n"; /* Message to be trans
 int main(void)
 {
 	HAL_Init(); /* HAL library initialization */
-  //SystemClock_Config();
-	UART1_Configuration(2); /* 1 for USART1 (Virtual Com) or 2 for USART2 (2 wire cable) */
+ // SystemClock_Config();
+	UART1_Configuration(1); /* 1 for USART1 (Virtual Com) or 2 for USART2 (2 wire cable) */
 	HAL_UART_Transmit(&UART_Handler, (uint8_t *)Message, strlen(Message), 10);
 	while(1)
 	{
@@ -43,8 +43,7 @@ void UART1_Configuration(int type)
  
   
 	UART2_GPIO_Handler.Mode = GPIO_MODE_AF_PP;
-	// UART2_GPIO_Handler.Pull = GPIO_PULLUP;
-	UART2_GPIO_Handler.Pull = GPIO_NOPULL;
+	UART2_GPIO_Handler.Pull = GPIO_PULLUP;
 	UART2_GPIO_Handler.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   if (type == 1) {
     UART2_GPIO_Handler.Alternate = GPIO_AF7_USART1;
