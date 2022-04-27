@@ -1,5 +1,6 @@
 #include "stm32f4xx_hal.h"
 #include <string.h>
+#include "stm32f429i_discovery.h"
 
 /*Function prototype for delay and UART2 coznfiguration functions */
 void UART1_Configuration(int type);
@@ -14,7 +15,7 @@ int main(void)
 {
 	HAL_Init(); /* HAL library initialization */
  // SystemClock_Config();
-	UART1_Configuration(1); /* 1 for USART1 (Virtual Com) or 2 for USART2 (2 wire cable) */
+	UART1_Configuration(2); /* 1 for USART1 (Virtual Com) or 2 for USART2 (2 wire cable) */
 	HAL_UART_Transmit(&UART_Handler, (uint8_t *)Message, strlen(Message), 10);
 	while(1)
 	{
@@ -25,6 +26,9 @@ int main(void)
 		
 	}
 }
+
+
+
 
 void UART1_Configuration(int type)
 {

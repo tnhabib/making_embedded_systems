@@ -8,8 +8,8 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "/Users/tonyhabib/projects/making_embedded_systems/week5/console_command/include",
-                "/Users/tonyhabib/projects/making_embedded_systems/week5/console_command/src",
+                "/Users/tonyhabib/projects/making_embedded_systems/week5/console_cmd/include",
+                "/Users/tonyhabib/projects/making_embedded_systems/week5/console_cmd/src",
                 "/Users/tonyhabib/.platformio/packages/framework-stm32cubef4/Drivers/BSP/STM32F429I-Discovery",
                 "/Users/tonyhabib/.platformio/packages/framework-stm32cubef4/Drivers/CMSIS/Include",
                 "/Users/tonyhabib/.platformio/packages/framework-stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
@@ -90,8 +90,8 @@
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "/Users/tonyhabib/projects/making_embedded_systems/week5/console_command/include",
-                    "/Users/tonyhabib/projects/making_embedded_systems/week5/console_command/src",
+                    "/Users/tonyhabib/projects/making_embedded_systems/week5/console_cmd/include",
+                    "/Users/tonyhabib/projects/making_embedded_systems/week5/console_cmd/src",
                     "/Users/tonyhabib/.platformio/packages/framework-stm32cubef4/Drivers/BSP/STM32F429I-Discovery",
                     "/Users/tonyhabib/.platformio/packages/framework-stm32cubef4/Drivers/CMSIS/Include",
                     "/Users/tonyhabib/.platformio/packages/framework-stm32cubef4/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
