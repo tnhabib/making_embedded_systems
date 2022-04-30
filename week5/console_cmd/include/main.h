@@ -22,7 +22,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+// #include "stm32f429i_discovery_gyroscope.h"
+#include "stm32f429i_discovery_lcd.h"
 #include "stm32f429i_discovery.h"
+#include "i3g4250d.h"
+#include "gyro.h"
+
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -39,6 +44,12 @@
 /* Exported macro ------------------------------------------------------------*/
 #define COUNTOF(__BUFFER__)   (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 
+
 /* Exported functions ------------------------------------------------------- */
+
+
+
+
+
 
 #endif /* __MAIN_H */

@@ -14,6 +14,8 @@
 
 #include "version.h"
 #include "LcdDisplay.h"
+#include "gyro_util.h"
+#include "stm32f429i_discovery_lcd.h"
 
 #define IGNORE_UNUSED_VARIABLE(x)     if ( &x == &x ) {}
 
@@ -24,7 +26,9 @@ static eCommandResult_T ConsoleCommandVer(const char buffer[]);
 static eCommandResult_T ConsoleCommandHelp(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[]);
-static eCommandResult_T ConsoleCommandDrawLeftCircle(const char buffer[]);
+static eCommandResult_T ConsoleCommandDrawCircle(const char buffer[]);
+static eCommandResult_T ConsoleCommandGetGyroMotion(const char buffer[]);
+static eCommandResult_T ConsoleCommandSetGyroTolerance(const char buffer[]);
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
 {
@@ -33,22 +37,48 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
     {"ver", &ConsoleCommandVer, HELP("Get the version string")},
     {"int", &ConsoleCommandParamExampleInt16, HELP("How to get a signed int16 from params list: int -321")},
     {"u16h", &ConsoleCommandParamExampleHexUint16, HELP("How to get a hex u16 from the params list: u16h aB12")},
-    {"drawLeftCircle", &ConsoleCommandDrawLeftCircle, HELP("Draws the left circle for the playfiled")},
+    {"drawC", &ConsoleCommandDrawCircle, HELP("Draws a circle (1,2,3,4) for the playfiled")},
+	{"getGM", &ConsoleCommandGetGyroMotion, HELP("Polls and returns the Gyro Motion detected")},
+	{"setGT", &ConsoleCommandSetGyroTolerance, HELP("Set the Gyro Motion Tolerance")},
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
 
-static eCommandResult_T ConsoleCommandDrawLeftCircle(const char buffer[]) {
 
 
-	BSP_LCD_SetTextColor(LCD_COLOR_ORANGE);
-	BSP_LCD_FillCircle((BSP_LCD_GetXSize() / 5), (310-110), 30);
+static eCommandResult_T ConsoleCommandSetGyroTolerance(const char buffer[]) {
+	int16_t tolerance;
+	ConsoleReceiveParamInt16(buffer, 1, &tolerance);
+	setGyroMotionTolerance((float)tolerance);
+	ConsoleIoSendString(STR_ENDLINE);
+	return CONSOLE_SUCCESS;
+}
 
-	// theDisplay.Init();
-	// theDisplay.DrawLeftCircle(1, LCD_COLOR_ORANGE);	
+static eCommandResult_T ConsoleCommandGetGyroMotion(const char buffer[]) {
+
+	HAL_Delay(500);
+	ConsoleIoSendString("Waiting for Gyro Motion to Cross a Threshold");
+	ConsoleIoSendString(STR_ENDLINE);
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+	int motionLocation = waitforGyroMotionDetection();
+	drawCircle(motionLocation);
+	ConsoleIoSendString("Motion Detected");
+	ConsoleIoSendString(STR_ENDLINE);
+	return COMMAND_SUCCESS;
+}
+
+static eCommandResult_T ConsoleCommandDrawCircle(const char buffer[]) {
+
+	int16_t circleLocation;
+	ConsoleReceiveParamInt16(buffer, 1, &circleLocation);
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+	drawCircle(circleLocation);
+	ConsoleIoSendString(STR_ENDLINE);
 	return COMMAND_SUCCESS;
 	
 }
+
+
 static eCommandResult_T ConsoleCommandComment(const char buffer[])
 {
 	// do nothing
@@ -84,6 +114,7 @@ static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[])
 	result = ConsoleReceiveParamInt16(buffer, 1, &parameterInt);
 	if ( COMMAND_SUCCESS == result )
 	{
+		ConsoleIoSendString(STR_ENDLINE);
 		ConsoleIoSendString("Parameter is ");
 		ConsoleSendParamInt16(parameterInt);
 		ConsoleIoSendString(" (0x");
@@ -100,6 +131,7 @@ static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[])
 	result = ConsoleReceiveParamHexUint16(buffer, 1, &parameterUint16);
 	if ( COMMAND_SUCCESS == result )
 	{
+		ConsoleIoSendString(STR_ENDLINE);
 		ConsoleIoSendString("Parameter is 0x");
 		ConsoleSendParamHexUint16(parameterUint16);
 		ConsoleIoSendString(STR_ENDLINE);
@@ -113,6 +145,7 @@ static eCommandResult_T ConsoleCommandVer(const char buffer[])
 
     IGNORE_UNUSED_VARIABLE(buffer);
 
+	ConsoleIoSendString(STR_ENDLINE);
 	ConsoleIoSendString(VERSION_STRING);
 	ConsoleIoSendString(STR_ENDLINE);
 	return result;

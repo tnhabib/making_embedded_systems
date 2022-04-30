@@ -1,12 +1,9 @@
 
 #include "main.h"
-
 #include "console.h"
-#include "stm32f429i_discovery_lcd.h"
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
-
 
 
 
@@ -16,18 +13,23 @@ int main(void) {
 
   HAL_Init();
 
-  // if the below is uncommented , screen drawing works , but UART I/O is messed up
-    //SystemClock_Config();
-  //   BSP_LCD_Init();
- 
-  //   BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
-  //   BSP_LCD_SelectLayer(0);
-  //   BSP_LCD_DisplayOn();
-  //  BSP_LCD_Clear(LCD_COLOR_BLUE);
-	// BSP_LCD_SetTextColor(LCD_COLOR_ORANGE);
-	// BSP_LCD_FillCircle((BSP_LCD_GetXSize() / 5), (310-110), 30);
+  SystemClock_Config();
+
+  /// Setup LCD 
+  BSP_LCD_Init();
+  BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
+  BSP_LCD_SelectLayer(0);
+  BSP_LCD_DisplayOn();
+  BSP_LCD_Clear(LCD_COLOR_WHITE);
+
+
+  // Setup Gyro Sensor
+  Gyro_Init();
+
+
+  // Setup Command Line Console
   ConsoleInit();
-  /* Configure the system clock to 180 MHz */
+
 
   while(1) {
     ConsoleProcess();
@@ -48,7 +50,7 @@ static void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct;
 
   /* Enable Power Control clock */
-  __PWR_CLK_ENABLE();
+  __HAL_RCC_PWR_CLK_ENABLE();
   
   /* The voltage scaling allows optimizing the power consumption when the device is 
      clocked below the maximum system frequency, to update the voltage scaling value 
@@ -61,21 +63,11 @@ static void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 8;
-  RCC_OscInitStruct.PLL.PLLN = 360;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLN = 336;
+  RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
-  if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    /* Initialization Error */
-    Error_Handler();
-  }
-  
-  if(HAL_PWREx_ActivateOverDrive() != HAL_OK)
-  {
-    /* Initialization Error */
-    Error_Handler();
-  }
-  
+  HAL_RCC_OscConfig(&RCC_OscInitStruct);
+
   /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
      clocks dividers */
   RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
@@ -83,12 +75,9 @@ static void SystemClock_Config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;  
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;  
-  if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
-  {
-    /* Initialization Error */
-    Error_Handler();
-  }
+  HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 }
+
 static void Error_Handler(void)
 {
   /* Turn LED4 on */
@@ -97,5 +86,6 @@ static void Error_Handler(void)
   {
   }
 }
+
 
 

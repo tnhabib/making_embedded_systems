@@ -25,6 +25,7 @@ eConsoleError ConsoleIoInit(void)
    return CONSOLE_ERROR;
   }
 
+ 
 	return CONSOLE_SUCCESS;
 }
 
@@ -66,8 +67,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   /* Enable GPIO TX/RX clock */
   USARTx_TX_GPIO_CLK_ENABLE();
   USARTx_RX_GPIO_CLK_ENABLE();
-  /* Enable USART1 clock */
-  USARTx_CLK_ENABLE(); 
+  // /* Enable USART1 clock */
+   USARTx_CLK_ENABLE(); 
   
   /*##-2- Configure peripheral GPIO ##########################################*/  
   /* UART TX GPIO pin configuration  */
@@ -84,4 +85,5 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   GPIO_InitStruct.Alternate = USARTx_RX_AF;
     
   HAL_GPIO_Init(USARTx_RX_GPIO_PORT, &GPIO_InitStruct);
+
 }
