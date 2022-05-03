@@ -7,6 +7,8 @@
 //		3. Implement the function, using ConsoleReceiveParam<Type> to get the parameters from the buffer.
 
 #include <string.h>
+#include <stdio.h>
+#include <time.h>
 #include "consoleCommands.h"
 #include "console.h"
 #include "consoleIo.h"
@@ -29,6 +31,7 @@ static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[])
 static eCommandResult_T ConsoleCommandDrawCircle(const char buffer[]);
 static eCommandResult_T ConsoleCommandGetGyroMotion(const char buffer[]);
 static eCommandResult_T ConsoleCommandSetGyroTolerance(const char buffer[]);
+static eCommandResult_T ConsoleCommandGetGyroSample(const char buffer[]);
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
 {
@@ -40,12 +43,29 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
     {"drawC", &ConsoleCommandDrawCircle, HELP("Draws a circle (1,2,3,4) for the playfiled")},
 	{"getGM", &ConsoleCommandGetGyroMotion, HELP("Polls and returns the Gyro Motion detected")},
 	{"setGT", &ConsoleCommandSetGyroTolerance, HELP("Set the Gyro Motion Tolerance")},
+	{"getGSample", &ConsoleCommandGetGyroSample, HELP("Get N number of Gyro Sample separate by 10ms")},
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
 
 
+static eCommandResult_T ConsoleCommandGetGyroSample(const char buffer[]) {
+	char gyroSampleStr[100];
+	char timeStamp[100];
+	int16_t numSamples;
+	int ii = 0;
+	ConsoleReceiveParamInt16(buffer, 1, &numSamples);
+	float xyzGyro[3];
+	for (int ii=0; ii < numSamples; ii++) {
+		getGyroSample(xyzGyro);
+		sprintf(gyroSampleStr,"X: %f, y: %f, z: %f", xyzGyro[0], xyzGyro[1], xyzGyro[2]);
+		ConsoleIoSendString(gyroSampleStr);
+		ConsoleIoSendString(STR_ENDLINE);
+		HAL_Delay(10);
+	}
 
+	
+}
 static eCommandResult_T ConsoleCommandSetGyroTolerance(const char buffer[]) {
 	int16_t tolerance;
 	ConsoleReceiveParamInt16(buffer, 1, &tolerance);

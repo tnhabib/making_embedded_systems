@@ -1,11 +1,17 @@
 #include "gyro.h"
 #include "i3g4250d.h"
 #include "stm32f4xx_hal.h"
-
+#include "gyro_util.h"
 #include "main.h"
+#include <time.h>
+
 static int gyroPollDelay = 1000;
 static float gyroMotionTolerance = 100000.0f;
 #define ABS(x)         (x < 0) ? (-x) : x
+
+void getGyroSample(float* xyzGyro) {
+	I3G4250D_ReadXYZAngRate(xyzGyro);
+}
 
 int waitforGyroMotionDetection() {
     float xyzGyro[3];
@@ -85,3 +91,5 @@ void Gyro_Init() {
     
 
 }
+
+

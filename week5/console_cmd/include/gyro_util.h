@@ -7,6 +7,6 @@
 int waitforGyroMotionDetection();
 void setGyroMotionTolerance(float t);
 void Gyro_Init();
-
+void getGyroSample(float* xyzGyro);
 
 #endif
