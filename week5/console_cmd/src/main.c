@@ -1,9 +1,9 @@
 
 #include "main.h"
 #include "console.h"
-
+#include "gyro_util.h"
 static void SystemClock_Config(void);
-static void Error_Handler(void);
+// static void Error_Handler(void);
 
 
 
@@ -78,14 +78,14 @@ static void SystemClock_Config(void)
   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 }
 
-static void Error_Handler(void)
-{
-  /* Turn LED4 on */
-  BSP_LED_On(LED4);
-  while(1)
-  {
-  }
-}
+// static void Error_Handler(void)
+// {
+//   /* Turn LED4 on */
+//   BSP_LED_On(LED4);
+//   while(1)
+//   {
+//   }
+// }
 
 
 
