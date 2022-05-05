@@ -5,7 +5,7 @@
 #include "main.h"
 #include <time.h>
 
-static int gyroPollDelay = 1000;
+static int gyroPollDelay = 50;
 static float gyroMotionTolerance = 100000.0f;
 #define ABS(x)         (x < 0) ? (-x) : x
 
@@ -13,8 +13,8 @@ void getGyroSample(float* xyzGyro) {
 	I3G4250D_ReadXYZAngRate(xyzGyro);
 }
 
-int waitforGyroMotionDetection() {
-    float xyzGyro[3];
+int waitforGyroMotionDetection(float* xyzGyro) {
+  
 	float Xval, Yval, Zval = 0x00;
 	while (1) {
 		I3G4250D_ReadXYZAngRate(xyzGyro);
@@ -22,7 +22,8 @@ int waitforGyroMotionDetection() {
     	Xval = ABS((xyzGyro[0]));
     	Yval = ABS((xyzGyro[1])); 
     	Zval = ABS((xyzGyro[2])); 
-	    if((Xval>Yval) && (Xval>Zval)) {
+		
+	
 			if(xyzGyro[0] > gyroMotionTolerance)
 			{ 
 				// Down Detected
@@ -33,8 +34,8 @@ int waitforGyroMotionDetection() {
 				// Up Detected
                 return 2;
 			}      
-        }
-		else if ((Yval>Xval) && (Yval>Zval)) {
+        
+	
 			if(xyzGyro[1] < -gyroMotionTolerance)
 			{
 				// Left Detected
@@ -45,7 +46,7 @@ int waitforGyroMotionDetection() {
 				// Right Detected
 				return 3;
 			}     
-    	} 
+    	
 		HAL_Delay(gyroPollDelay);
 	}
 

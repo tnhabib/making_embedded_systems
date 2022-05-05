@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "i3g4250d.h"
 #include "stm32f429i_discovery_gyroscope.h"
-int waitforGyroMotionDetection();
+int waitforGyroMotionDetection(float* xyzGyro);
 void setGyroMotionTolerance(float t);
 void Gyro_Init();
 void getGyroSample(float* xyzGyro);
