@@ -1,7 +1,7 @@
 #include "LcdDisplay.h"
 #include "stm32f429i_discovery_lcd.h"
 
-void drawCircle(int circleLocation) {
+void drawCircle(int circleLocation, int filled) {
     int x, y, radius;
 	switch (circleLocation) {
 		case 1: // Left
@@ -32,6 +32,8 @@ void drawCircle(int circleLocation) {
 	}
 	radius = 30;
 	
-	
+	if (!filled) {
+		BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
+	}
 	BSP_LCD_FillCircle(x, y, radius);
 }

@@ -14,39 +14,30 @@ void getGyroSample(float* xyzGyro) {
 }
 
 int waitforGyroMotionDetection(float* xyzGyro) {
-  
-	float Xval, Yval, Zval = 0x00;
+	
 	while (1) {
 		I3G4250D_ReadXYZAngRate(xyzGyro);
-		/* Update autoreload and capture compare registers value */
-    	Xval = ABS((xyzGyro[0]));
-    	Yval = ABS((xyzGyro[1])); 
-    	Zval = ABS((xyzGyro[2])); 
-		
-	
-			if(xyzGyro[0] > gyroMotionTolerance)
-			{ 
-				// Down Detected
-                return 4;
-			}
-			else if(xyzGyro[0] < -gyroMotionTolerance)
-			{ 
-				// Up Detected
-                return 2;
-			}      
+		if(xyzGyro[0] > gyroMotionTolerance)
+		{ 
+			// Down Detected
+            return 4;
+		}
+		else if(xyzGyro[0] < -gyroMotionTolerance)
+		{ 
+			// Up Detected
+            return 2;
+		}      
         
-	
-			if(xyzGyro[1] < -gyroMotionTolerance)
-			{
-				// Left Detected
-                return 1;
-			}
-			else if(xyzGyro[1] > gyroMotionTolerance)
-			{
-				// Right Detected
-				return 3;
-			}     
-    	
+		if(xyzGyro[1] < -gyroMotionTolerance)
+		{
+			// Left Detected
+            return 1;
+		}
+		else if(xyzGyro[1] > gyroMotionTolerance)
+		{
+			// Right Detected
+			return 3;
+		}      	
 		HAL_Delay(gyroPollDelay);
 	}
 

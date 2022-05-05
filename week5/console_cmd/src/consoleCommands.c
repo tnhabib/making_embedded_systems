@@ -37,6 +37,8 @@ static eCommandResult_T ConsoleCommandGetGyroSample(const char buffer[]);
 static eCommandResult_T ConsoleCommandGetRandomValue(const char buffer[]);
 static eCommandResult_T ConsoleCommandPrintSequence(const char buffer[]);
 static eCommandResult_T ConsoleCommandIncrementSequence(const char buffer[]);
+static eCommandResult_T ConsoleCommandPlaySequence(const char buffer[]);
+static eCommandResult_T ConsoleCommandCompareSequence(const char buffer[]);
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
 {
@@ -52,10 +54,39 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
 	{"getRand", &ConsoleCommandGetRandomValue, HELP("Get Random Value between 1 and 4")},
 	{"printSeq", &ConsoleCommandPrintSequence, HELP("Print the current match sequence")},
 	{"incSeq", &ConsoleCommandIncrementSequence, HELP("Add to the sequence")},
+	{"playSeq", &ConsoleCommandPlaySequence, HELP("Play the sequence")},
+	{"cmpSeq", &ConsoleCommandCompareSequence, HELP("Compare user input to the sequence")},
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
 
+
+static eCommandResult_T ConsoleCommandCompareSequence(const char buffer[]) {
+	char matchStr[50];
+	int matches = 0;
+	HAL_Delay(500);
+	ConsoleIoSendString("Start Playing!");
+	matches = compareSequence();
+
+	ConsoleIoSendString(STR_ENDLINE);
+	sprintf(matchStr, "Compare Complete. Matches : %d", matches);
+	ConsoleIoSendString(matchStr);
+	ConsoleIoSendString(STR_ENDLINE);
+
+}
+static eCommandResult_T ConsoleCommandPlaySequence(const char buffer[]) {
+	
+	char playStr[50];
+	int seqSize;
+	seqSize = getSequenceSize();
+	playSequence();
+	ConsoleIoSendString(STR_ENDLINE);
+	sprintf(playStr, "Play Complete. Sequence size is : %d", seqSize);
+	ConsoleIoSendString(playStr);
+	ConsoleIoSendString(STR_ENDLINE);
+
+	return CONSOLE_SUCCESS;
+}
 
 static eCommandResult_T ConsoleCommandIncrementSequence(const char buffer[]) {
 	
@@ -132,7 +163,7 @@ static eCommandResult_T ConsoleCommandGetGyroMotion(const char buffer[]) {
 	ConsoleIoSendString(STR_ENDLINE);
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
 	int motionLocation = waitforGyroMotionDetection(xyzGyro);
-	drawCircle(motionLocation);
+	drawCircle(motionLocation, 1);
 	ConsoleIoSendString("Motion Detected");
 	ConsoleIoSendString(STR_ENDLINE);
 	sprintf(gyroSampleStr,"X: %f, y: %f, z: %f", xyzGyro[0], xyzGyro[1], xyzGyro[2]);
@@ -146,7 +177,7 @@ static eCommandResult_T ConsoleCommandDrawCircle(const char buffer[]) {
 	int16_t circleLocation;
 	ConsoleReceiveParamInt16(buffer, 1, &circleLocation);
 	BSP_LCD_Clear(LCD_COLOR_WHITE);
-	drawCircle(circleLocation);
+	drawCircle(circleLocation, 1);
 	ConsoleIoSendString(STR_ENDLINE);
 	return COMMAND_SUCCESS;
 	

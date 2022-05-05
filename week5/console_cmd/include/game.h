@@ -7,5 +7,7 @@ int * getMatchSequence();
 int getSequenceSize();
 void resetSequence();
 void incMatchSequence();
+void playSequence();
+int compareSequence();
 
 #endif
