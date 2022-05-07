@@ -1,7 +1,7 @@
 #include "main.h"
 #include <stdio.h>
 // #include <stdlib.h>
-
+#include "HUB75ELib.h"
 static void SystemClock_Config(void);
 void Error_Handler(void);
 void EXTI0_Callback(uint16_t GPIO_Pin);
@@ -14,10 +14,17 @@ int main(void) {
     uint8_t buf_1[1000];
     uint8_t buf_2[1000];
  
-    double xyzGyro[3];
+  float xyzGyro[3];
     
-  
-
+    unsigned char myBitmap[32*32];
+  	HUB75E_Init();
+	  HUB75E_setDisplayBuffer(myBitmap); //Each bit represent each pixels. 1 Byte contains 8 pixels 
+	  HUB75E_setDisplayBrightness(BrightnessLevel1);
+  	HUB75E_setDisplayColor(Blue);
+  	HUB75E_setAddressingMode(HUB75EAddressingModeABCDE);
+	while(1) {
+ 	   HUB75E_displayBufferPixels();
+        }
 
     HAL_Init();
     SystemClock_Config();
@@ -43,9 +50,9 @@ int main(void) {
   
       I3G4250D_ReadXYZAngRate(xyzGyro);
      
-      sprintf(buf,  "X: %4.2f", xyzGyro[0]);
-      sprintf(buf_1,  "Y: %4.2f", xyzGyro[1]);
-      sprintf(buf_2,  "Z: %4.2f", xyzGyro[2]);
+      // sprintf(buf,  "X: %4.2f", xyzGyro[0]);
+      // sprintf(buf_1,  "Y: %4.2f", xyzGyro[1]);
+      // sprintf(buf_2,  "Z: %4.2f", xyzGyro[2]);
       
       BSP_LCD_DisplayStringAtLine(0, buf);
       BSP_LCD_DisplayStringAtLine(1, buf_1);
