@@ -2,15 +2,19 @@
 #include "main.h"
 #include "console.h"
 #include "gyro_util.h"
+#include "LcdDisplay.h"
+
 static void SystemClock_Config(void);
 // static void Error_Handler(void);
-
-
+// #define TIMx                           TIM3
+// #define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
+// #define TIMx_IRQn                      TIM3_IRQn
+// #define TIMx_IRQHandler                TIM3_IRQHandler
 
 int main(void) {
 
 
-
+  // __HAL_DBGMCU_FREEZE_TIM3();
   HAL_Init();
 
   SystemClock_Config();
@@ -57,13 +61,16 @@ static void SystemClock_Config(void)
      regarding system frequency refer to product datasheet.  */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   
+  /* Activate the Over-Drive mode */
+  HAL_PWREx_EnableOverDrive();
+
   /* Enable HSE Oscillator and activate PLL with HSE as source */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 8;
-  RCC_OscInitStruct.PLL.PLLN = 336;
+  RCC_OscInitStruct.PLL.PLLN = 360;
   RCC_OscInitStruct.PLL.PLLP = 2;
   RCC_OscInitStruct.PLL.PLLQ = 7;
   HAL_RCC_OscConfig(&RCC_OscInitStruct);
@@ -78,14 +85,12 @@ static void SystemClock_Config(void)
   HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5);
 }
 
-// static void Error_Handler(void)
-// {
-//   /* Turn LED4 on */
-//   BSP_LED_On(LED4);
-//   while(1)
-//   {
-//   }
-// }
+
+
+
+
+
+
 
 
 

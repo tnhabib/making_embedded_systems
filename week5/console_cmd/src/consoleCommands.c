@@ -72,6 +72,8 @@ static eCommandResult_T ConsoleCommandCompareSequence(const char buffer[]) {
 	sprintf(matchStr, "Compare Complete. Matches : %d", matches);
 	ConsoleIoSendString(matchStr);
 	ConsoleIoSendString(STR_ENDLINE);
+	
+	return CONSOLE_SUCCESS;
 
 }
 static eCommandResult_T ConsoleCommandPlaySequence(const char buffer[]) {
@@ -133,7 +135,7 @@ static eCommandResult_T ConsoleCommandGetRandomValue(const char buffer[]) {
 static eCommandResult_T ConsoleCommandGetGyroSample(const char buffer[]) {
 	char gyroSampleStr[100];
 	int16_t numSamples;
-	int ii = 0;
+	
 	ConsoleReceiveParamInt16(buffer, 1, &numSamples);
 	float xyzGyro[3];
 	for (int ii=0; ii < numSamples; ii++) {

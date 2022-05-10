@@ -35,6 +35,9 @@
    resources */
 /* Definition for USARTx clock resources */
 
+TIM_HandleTypeDef    TimHandle;
+uint16_t uwPrescalerValue; 
+
 
 /* Size of Transmission buffer */
 #define TXBUFFERSIZE                     (COUNTOF(aTxBuffer) - 1)
