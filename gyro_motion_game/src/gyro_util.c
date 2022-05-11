@@ -4,7 +4,6 @@
 #include "gyro_util.h"
 #include "main.h"
 
-
 #define TIMx                           TIM3
 #define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
 #define TIMx_IRQn                      TIM3_IRQn

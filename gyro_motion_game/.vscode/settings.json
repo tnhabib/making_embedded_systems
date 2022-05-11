@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "lcddisplay.h": "c",
+        "game.h": "c",
+        "stm32f429i_discovery_lcd.h": "c",
+        "fonts.h": "c",
+        "stm32f4xx_hal.h": "c"
+    }
+}

@@ -3,21 +3,33 @@
 #include "console.h"
 #include "gyro_util.h"
 #include "LcdDisplay.h"
+#include "game.h"
+
+void UserButton_Init();
+static void MX_NVIC_Init();
+void EXTI0_Callback(uint16_t GPIO_Pin);
 
 static void SystemClock_Config(void);
-// static void Error_Handler(void);
-// #define TIMx                           TIM3
-// #define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
-// #define TIMx_IRQn                      TIM3_IRQn
-// #define TIMx_IRQHandler                TIM3_IRQHandler
+
+#define USER_BUTTON_PORT GPIOA
+#define USER_BUTTON_PIN GPIO_PIN_0
+
+/* Clocks */
+
+#define USER_BUTTON_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
 
 int main(void) {
 
+  volatile enum GameState currentGameState = TITLE_SCREEN; 
 
   // __HAL_DBGMCU_FREEZE_TIM3();
   HAL_Init();
 
   SystemClock_Config();
+    
+  MX_NVIC_Init();
+  
+  UserButton_Init();
 
   /// Setup LCD 
   BSP_LCD_Init();
@@ -34,9 +46,12 @@ int main(void) {
   // Setup Command Line Console
   ConsoleInit();
 
-
+  
   while(1) {
+ 
+    nextGameState(currentGameState);
     ConsoleProcess();
+    currentGameState = getGameState(); 
   }
 
 }
@@ -90,7 +105,35 @@ static void SystemClock_Config(void)
 
 
 
+static void MX_NVIC_Init(void)
+{
+  /* EXTI0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+  
+}
 
 
 
 
+void UserButton_Init() {
+    USER_BUTTON_CLK_ENABLE();
+    GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitStruct.Pin = USER_BUTTON_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(USER_BUTTON_PORT, &GPIO_InitStruct);
+    
+}
+
+
+void EXTI0_IRQHandler(void)
+{
+    HAL_GPIO_EXTI_IRQHandler(USER_BUTTON_PIN);
+}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  setGameState(START_GAME);
+}

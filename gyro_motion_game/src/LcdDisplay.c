@@ -1,5 +1,5 @@
 #include "LcdDisplay.h"
-#include "stm32f429i_discovery_lcd.h"
+
 
 void drawCircle(int circleLocation, int filled) {
     int x, y, radius;
