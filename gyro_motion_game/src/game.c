@@ -63,10 +63,15 @@ int titleScreen() {
 
 int gameOver() {
     //BSP_LCD_Clear(LCD_COLOR_WHITE);
+    BSP_LCD_Init();
+    BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
+    BSP_LCD_SelectLayer(0);
+
+
     BSP_LCD_SetFont(&Font16);
     BSP_LCD_ClearStringLine(1);
     BSP_LCD_ClearStringLine(2);
-    BSP_LCD_DisplayStringAt(100,100, (uint8_t*)"Game Over", CENTER_MODE);
+    BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Game Over", CENTER_MODE);
  
     return 0;
 }
@@ -109,7 +114,11 @@ int playSequence() {
         HAL_Delay(animDelay);
     }
     gGameState = COMPARE_SEQUENCE;
+    BSP_LCD_Init();
+    BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
+    BSP_LCD_SelectLayer(0);
     BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"GO!!", CENTER_MODE);
+    HAL_Delay(250);
     return 0;
 }
 
@@ -127,7 +136,7 @@ int compareSequence() {
         } else {
             break;
         }
-        HAL_Delay(250);        
+        HAL_Delay(500);        
         drawCircle(userMotionDirection,0);
     }
     if (matches == seqSize) {
