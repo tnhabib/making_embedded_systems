@@ -16,7 +16,7 @@ static float gyroMotionTolerance = 100000.0f;
 #define ABS(x)         (x < 0) ? (-x) : x
 static void Error_Handler(void);
 
-volatile int timerExpired = 0;
+volatile int timerCount = 0;
 TIM_HandleTypeDef    TimHandle;
 uint16_t uwPreScalerValue;
 
@@ -28,71 +28,67 @@ void getGyroSample(float* xyzGyro) {
 
 
 int waitforGyroMotionDetection(float* xyzGyro) {
-      BSP_LED_Init(LED3);
-  BSP_LED_Init(LED4);
+    BSP_LED_Init(LED3);
+    BSP_LED_Init(LED4);
     int motionResult = -1;
     int motionDetected = 0;
-      TimHandle.Instance = TIMx;
-     /* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz */
-  uwPrescalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
-  timerExpired = 0;
-  TimHandle.Init.Period = 20000 - 1;
-  TimHandle.Init.Prescaler = uwPrescalerValue;
-  TimHandle.Init.ClockDivision = 0;
-  TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-  TimHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+        TimHandle.Instance = TIMx;
+      /* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz */
+    uwPrescalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
+    timerCount = 0;
+    TimHandle.Init.Period = 20000 - 1;
+    TimHandle.Init.Prescaler = uwPrescalerValue;
+    TimHandle.Init.ClockDivision = 0;
+    TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+    TimHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
    
+    BSP_LCD_Clear(LCD_COLOR_WHITE);
+    HAL_TIM_Base_Init(&TimHandle);
+ 
 
-  if(HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
-  {
-    /* Initialization Error */
-    Error_Handler();
-  }
-    timerExpired = 0;
-
-    while (!timerExpired && !motionDetected) {
-        //   TimHandle.Instance->SR = 0;
-        //  __HAL_TIM_CLEAR_FLAG(&TimHandle, TIM_SR_UIF);
+    while (timerCount < 2 && !motionDetected) {
+  
         if(HAL_TIM_Base_Start_IT(&TimHandle) != HAL_OK)
         {
             /* Starting Error */
             Error_Handler();
         }
      
-		I3G4250D_ReadXYZAngRate(xyzGyro);
-		if(xyzGyro[0] > gyroMotionTolerance)
-		{ 
-			// Down Detected
-            motionResult = 4;
-            motionDetected = 1;
-		}
-		else if(xyzGyro[0] < -gyroMotionTolerance)
-		{ 
-			// Up Detected
-            motionResult =  2;
-            motionDetected = 1;
-		}      
+        I3G4250D_ReadXYZAngRate(xyzGyro);
+        if(xyzGyro[0] > gyroMotionTolerance)
+        { 
+          // Down Detected
+                motionResult = 4;
+                motionDetected = 1;
+        }
+        else if(xyzGyro[0] < -gyroMotionTolerance)
+        { 
+          // Up Detected
+                motionResult =  2;
+                motionDetected = 1;
+        }      
         
-		if(xyzGyro[1] < -gyroMotionTolerance)
-		{
-			// Left Detected
-            motionResult =  1;
-            motionDetected = 1;
-		}
-		else if(xyzGyro[1] > gyroMotionTolerance)
-		{
-			// Right Detected
-			motionResult = 3;
-            motionDetected = 1;
-		}      	
-		HAL_Delay(gyroPollDelay);
-	}
-    // timer Expired
-    if (timerExpired) {
-        motionResult = -1;
+        if(xyzGyro[1] < -gyroMotionTolerance)
+        {
+          // Left Detected
+                motionResult =  1;
+                motionDetected = 1;
+        }
+        else if(xyzGyro[1] > gyroMotionTolerance)
+        {
+          // Right Detected
+          motionResult = 3;
+                motionDetected = 1;
+        }      	
+        HAL_Delay(gyroPollDelay);
     }
-    // HAL_TIM_Base_Stop_IT(&TimHandle);
+    // timer Expired
+    if (timerCount >= 2) {
+        motionResult = -1;
+       
+    }
+     HAL_TIM_Base_Stop_IT(&TimHandle);
     return motionResult;
 }
 void setGyroMotionTolerance(float t) {
@@ -143,10 +139,10 @@ void Gyro_Init() {
 static void Error_Handler(void)
 {
   /* Turn LED4 on */
-  BSP_LED_On(LED4);
-  while(1)
-  {
-  }
+  // BSP_LED_On(LED4);
+  // while(1)
+  // {
+  // }
 }
 
 
@@ -155,8 +151,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     
      if (htim->Instance == TIM3) {
         BSP_LED_Toggle(LED3);
-        timerExpired = 1;
-        // HAL_TIM_Base_Stop_IT(&TimHandle);
+        timerCount++;
      }
    
 }
