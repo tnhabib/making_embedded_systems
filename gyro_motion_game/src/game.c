@@ -2,10 +2,11 @@
 #include "gyro_util.h"
 #include "game.h"
 #include "LcdDisplay.h"
+#include <stdio.h>
 
-static int matchSequence[100];
-static int seqSize;
-static int score = 0;
+static int gMatchSequence[100];
+static int gSeqSize;
+static int gScore = 0;
 static enum GameState gGameState = TITLE_SCREEN;
 
 #define ABS(x)         (x < 0) ? (-x) : x
@@ -42,6 +43,9 @@ void nextGameState(enum GameState state) {
 
 int startGame() {
 
+  // reset game properties
+    gScore = 0;
+    gSeqSize = 0;
     BSP_LCD_Clear(LCD_COLOR_WHITE);
     incMatchSequence();
     gGameState = PLAY_SEQUENCE;
@@ -51,8 +55,8 @@ int startGame() {
 
 int titleScreen() {
     // reset game properties
-    score = 0;
-    seqSize = 0;
+    gScore = 0;
+    gSeqSize = 0;
      BSP_LCD_SetFont(&Font16);
     BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Gyro Motion", CENTER_MODE);
     BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to Start", CENTER_MODE);
@@ -62,7 +66,9 @@ int titleScreen() {
 }
 
 int gameOver() {
-    //BSP_LCD_Clear(LCD_COLOR_WHITE);
+    
+    uint8_t scoreStr[40];
+
     BSP_LCD_Init();
     BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
     BSP_LCD_SelectLayer(0);
@@ -72,24 +78,28 @@ int gameOver() {
     BSP_LCD_ClearStringLine(1);
     BSP_LCD_ClearStringLine(2);
     BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Game Over", CENTER_MODE);
- 
+    sprintf(scoreStr, "Score : %d", gScore);
+    BSP_LCD_DisplayStringAt(0,125, (uint8_t*)scoreStr, CENTER_MODE);
+    
+    BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to ", CENTER_MODE);
+    BSP_LCD_DisplayStringAt(0,170, (uint8_t*)"Start New Game", CENTER_MODE);
     return 0;
 }
 int * getMatchSequence() {
-    return matchSequence;
+    return gMatchSequence;
 }
 
 int getSequenceSize() {
-    return seqSize;
+    return gSeqSize;
 }
 
 void resetSequence() {
-  seqSize = 0;
+  gSeqSize = 0;
 }
 
 int incMatchSequence() {
-    matchSequence[seqSize] = getRandomValue();
-    seqSize++;
+    gMatchSequence[gSeqSize] = getRandomValue();
+    gSeqSize++;
 
     gGameState = PLAY_SEQUENCE;
     return 0;
@@ -107,10 +117,10 @@ int getRandomValue() {
 
 int playSequence() {
     int animDelay = 1000;
-    for (int ii=0; ii < seqSize; ii++) {
-        drawCircle(matchSequence[ii], 1);
+    for (int ii=0; ii < gSeqSize; ii++) {
+        drawCircle(gMatchSequence[ii], 1);
         HAL_Delay(animDelay);
-        drawCircle(matchSequence[ii], 0);
+        drawCircle(gMatchSequence[ii], 0);
         HAL_Delay(animDelay);
     }
     gGameState = COMPARE_SEQUENCE;
@@ -118,7 +128,7 @@ int playSequence() {
     BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
     BSP_LCD_SelectLayer(0);
     BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"GO!!", CENTER_MODE);
-    HAL_Delay(250);
+    HAL_Delay(500);
     return 0;
 }
 
@@ -127,19 +137,19 @@ int compareSequence() {
     int userMotionDirection;
     float xyzGyro[3];
   
-    for (int ii=0; ii < seqSize; ii++) {
+    for (int ii=0; ii < gSeqSize; ii++) {
         userMotionDirection = waitforGyroMotionDetection(xyzGyro);
-        if (userMotionDirection == matchSequence[ii]) {
+        if (userMotionDirection == gMatchSequence[ii]) {
             drawCircle(userMotionDirection,1);
             matches++;
-            score++;
+            gScore++;
         } else {
             break;
         }
         HAL_Delay(500);        
         drawCircle(userMotionDirection,0);
     }
-    if (matches == seqSize) {
+    if (matches == gSeqSize) {
         gGameState = INCREMENT_SEQUENCE_SIZE;
     } else {
         gGameState = GAME_OVER;

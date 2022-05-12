@@ -13,6 +13,7 @@ int titleScreen();
 enum GameState getGameState();
 void nextGameState(enum GameState state);
 void setGameState(enum GameState state);
+enum GameState getGameState();
 int startGame();
 int gameOver();
 

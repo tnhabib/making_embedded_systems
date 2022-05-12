@@ -135,5 +135,10 @@ void EXTI0_IRQHandler(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-  setGameState(START_GAME);
+  enum GameState curGameState = getGameState();
+  // only start the same if in TITLE or GAME OVER state
+  if (curGameState == TITLE_SCREEN || curGameState == GAME_OVER) {
+    setGameState(START_GAME);
+  }
+  
 }

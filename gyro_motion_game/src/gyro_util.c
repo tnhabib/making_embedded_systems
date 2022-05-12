@@ -58,27 +58,27 @@ int waitforGyroMotionDetection(float* xyzGyro) {
         if(xyzGyro[0] > gyroMotionTolerance)
         { 
           // Down Detected
-                motionResult = 4;
-                motionDetected = 1;
+            motionResult = 4;
+            motionDetected = 1;
         }
         else if(xyzGyro[0] < -gyroMotionTolerance)
         { 
-          // Up Detected
-                motionResult =  2;
-                motionDetected = 1;
+            // Up Detected
+            motionResult =  2;
+            motionDetected = 1;
         }      
         
         if(xyzGyro[1] < -gyroMotionTolerance)
         {
           // Left Detected
-                motionResult =  1;
-                motionDetected = 1;
+            motionResult =  1;
+            motionDetected = 1;
         }
         else if(xyzGyro[1] > gyroMotionTolerance)
         {
           // Right Detected
-          motionResult = 3;
-                motionDetected = 1;
+           motionResult = 3;
+           motionDetected = 1;
         }      	
         HAL_Delay(gyroPollDelay);
     }
@@ -87,7 +87,7 @@ int waitforGyroMotionDetection(float* xyzGyro) {
         motionResult = -1;
        
     }
-     HAL_TIM_Base_Stop_IT(&TimHandle);
+    HAL_TIM_Base_Stop_IT(&TimHandle);
     return motionResult;
 }
 void setGyroMotionTolerance(float t) {
