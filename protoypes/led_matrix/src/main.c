@@ -1,23 +1,26 @@
 #include "main.h"
 #include <stdio.h>
-
+// #include <stdlib.h>
 #include "HUB75ELib.h"
-#include "sample_bitmap.h"
+
 static void SystemClock_Config(void);
 void Error_Handler(void);
 
 #include "dwt_delay.h"
+
+#include "matrix_util.h"
 
 int main(void) {
  
 
     
     unsigned char myBitmap[PIXELS_COUNT_IN_BYTES];
-    for (int ii=0; ii < PIXELS_COUNT_IN_BYTES; ii++) {
-      myBitmap[ii] = 255;
-    }
-   
 
+    fillBottomRectBuffer(myBitmap, PIXELS_COUNT_IN_BYTES);    
+    // for (int ii=0; ii < PIXELS_COUNT_IN_BYTES; ii++) {
+    //   myBitmap[ii] = 255;
+    // }
+    
     HAL_Init();
     SystemClock_Config();
     // DWT_Init();
