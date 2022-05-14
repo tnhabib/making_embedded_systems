@@ -36,7 +36,7 @@
 /* Definition for USARTx clock resources */
 
 TIM_HandleTypeDef    TimHandle;
-uint16_t uwPrescalerValue; 
+uint32_t uwPrescalerValue; 
 
 
 /* Size of Transmission buffer */
