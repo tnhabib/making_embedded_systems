@@ -23,10 +23,10 @@ int main(void) {
     
     HAL_Init();
     SystemClock_Config();
-    // DWT_Init();
+    DWT_Init();
     HUB75E_Init();
     HUB75E_setDisplayBuffer(myBitmap);
-    HUB75E_setDisplayBrightness(BrightnessLevel1);
+    HUB75E_setDisplayBrightness(BrightnessLevel3);
     HUB75E_setDisplayColor(Red);
     HUB75E_displayBufferPixels(myBitmap);
     while(1) {

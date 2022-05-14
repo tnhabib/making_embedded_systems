@@ -120,8 +120,7 @@ void HUB75E_GPIO_Init(void)
 }
 
 void HUB75E_DelayUs(int us) {
-	HAL_Delay(us);
-	// DWT_Delay(us);
+	 DWT_Delay(us);
 }
 
 void HUB75E_setPin(HUB75EPin p, int state) {
