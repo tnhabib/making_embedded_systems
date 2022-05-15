@@ -42,9 +42,10 @@ int main(void) {
     
 
 
-
+    drawGrapic(1);
+    drawGrapic(2);
     while(1) {
-       playSequenceLoop();
+      //  playSequenceLoop();
         // HUB75E_displayBufferPixels(myBitmap);
         // HUB75E_setDisplayColor(Red);
         // HAL_Delay(500);
@@ -98,27 +99,5 @@ static void SystemClock_Config(void)
 
 
 
-
-// copied from Cube IDE Generated code
-// void Error_Handler(void)
-// {
-//   /* USER CODE BEGIN Error_Handler_Debug */
-//   /* User can add his own implementation to report the HAL error return state */
-//  BSP_LED_On(LED4);
-//   while(1)
-//   {
-//   }
-// }
-  /* USER CODE END Error_Handler_Debug */
-
-
-
-// static void MX_NVIC_Init(void)
-// {
-//   /* EXTI0_IRQn interrupt configuration */
-//   HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
-//   HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-  
-// }
 
 
