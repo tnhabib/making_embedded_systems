@@ -4,6 +4,9 @@
 #include "gyro_util.h"
 #include "LcdDisplay.h"
 #include "game.h"
+#include "matrix_util.h"
+#include "HUB75ELib.h"
+#include "dwt_delay.h"
 
 void UserButton_Init();
 static void MX_NVIC_Init();
@@ -18,11 +21,15 @@ static void SystemClock_Config(void);
 
 #define USER_BUTTON_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
 
+// global variables
+ int gyroTimerCount = 0;
+ int matrixTimerCount = 0;
+ int debugMode = 0;
+
 int main(void) {
 
   volatile enum GameState currentGameState = TITLE_SCREEN; 
 
-  // __HAL_DBGMCU_FREEZE_TIM3();
   HAL_Init();
 
   SystemClock_Config();
@@ -43,13 +50,25 @@ int main(void) {
   Gyro_Init();
 
 
+  // set LED Matrix
+  HUB75E_Init();
+
+  // LEDs for DEBUGGING, extra feedback
+  BSP_LED_Init(LED3);
+  BSP_LED_Init(LED4);
+
+
+
   // Setup Command Line Console
   ConsoleInit();
 
   
   while(1) {
  
-    nextGameState(currentGameState);
+    if (!debugMode) {
+          nextGameState(currentGameState);
+    }
+
     ConsoleProcess();
     currentGameState = getGameState(); 
   }
@@ -142,3 +161,51 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
   
 }
+
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+ BSP_LED_On(LED4);
+  while(1)
+  {
+  }
+}
+
+void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
+{
+  /*##-1- Enable peripherals and GPIO Clocks #################################*/
+  /* TIMx Peripheral clock enable */
+  __HAL_RCC_TIM2_CLK_ENABLE();
+  __HAL_RCC_TIM3_CLK_ENABLE();
+
+  /*##-2- Configure the NVIC for TIMx ########################################*/
+  /* Set the TIMx priority */
+  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 1);
+  HAL_NVIC_SetPriority(TIM3_IRQn, 1, 1);
+
+  /* Enable the TIMx global Interrupt */
+  HAL_NVIC_EnableIRQ(TIM2_IRQn);
+  HAL_NVIC_EnableIRQ(TIM3_IRQn);
+
+}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    
+    if (htim->Instance == TIM2) {
+        matrixTimerCount++;
+        if (matrixTimerCount > 1) {
+         BSP_LED_Toggle(LED3);
+         HUB75E_clearDisplayBuffer();
+        }
+    }
+   
+    
+     if (htim->Instance == TIM3) {
+        BSP_LED_Toggle(LED3);
+        gyroTimerCount++;
+     }
+
+}
+

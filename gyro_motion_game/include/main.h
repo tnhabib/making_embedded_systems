@@ -22,21 +22,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-// #include "stm32f429i_discovery_gyroscope.h"
 #include "stm32f429i_discovery_lcd.h"
 #include "stm32f429i_discovery.h"
 #include "i3g4250d.h"
 #include "gyro.h"
 
 
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* User can use this section to tailor USARTx/UARTx instance used and associated 
-   resources */
-/* Definition for USARTx clock resources */
 
-TIM_HandleTypeDef    TimHandle;
-uint32_t uwPrescalerValue; 
 
 
 /* Size of Transmission buffer */
@@ -51,7 +43,7 @@ uint32_t uwPrescalerValue;
 /* Exported functions ------------------------------------------------------- */
 
 
-
+void Error_Handler(void);
 
 
 

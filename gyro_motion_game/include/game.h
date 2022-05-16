@@ -16,6 +16,15 @@ void setGameState(enum GameState state);
 enum GameState getGameState();
 int startGame();
 int gameOver();
+enum GraphicsMode getGraphicsMode(); 
+void setGraphicsMode(int16_t mode);
+
+enum GraphicsMode {
+    LCD_SCREEN,
+    LED_MATRIX
+};
+
+
 
 enum GameState {
     TITLE_SCREEN,

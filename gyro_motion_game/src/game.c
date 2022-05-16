@@ -2,11 +2,13 @@
 #include "gyro_util.h"
 #include "game.h"
 #include "LcdDisplay.h"
+#include "matrix_util.h"
 #include <stdio.h>
 
 static int gMatchSequence[100];
 static int gSeqSize;
 static int gScore = 0;
+static enum GraphicsMode gGraphicsMode = LED_MATRIX;
 static enum GameState gGameState = TITLE_SCREEN;
 
 #define ABS(x)         (x < 0) ? (-x) : x
@@ -22,6 +24,26 @@ static const sGameStateMap theGameStateMap[] =
 
     {NULL_STATE, NULL}
 };
+enum GraphicsMode getGraphicsMode() {
+    return gGraphicsMode;
+}
+
+void setGraphicsMode(int16_t mode) {
+    
+    switch (mode) 
+    {
+        case 1:
+            gGraphicsMode = LCD_SCREEN;
+            break;
+        case 2:
+            gGraphicsMode = LED_MATRIX;
+            break;
+        default:
+            gGraphicsMode = LED_MATRIX;
+    }
+    
+}
+
 enum GameState getGameState() {
     return gGameState;
 }
@@ -78,7 +100,7 @@ int gameOver() {
     BSP_LCD_ClearStringLine(1);
     BSP_LCD_ClearStringLine(2);
     BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Game Over", CENTER_MODE);
-    sprintf(scoreStr, "Score : %d", gScore);
+    sprintf((char *)scoreStr, "Score : %d", gScore);
     BSP_LCD_DisplayStringAt(0,125, (uint8_t*)scoreStr, CENTER_MODE);
     
     BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to ", CENTER_MODE);
@@ -118,11 +140,19 @@ int getRandomValue() {
 int playSequence() {
     int animDelay = 1000;
     for (int ii=0; ii < gSeqSize; ii++) {
-        drawCircle(gMatchSequence[ii], 1);
-        HAL_Delay(animDelay);
-        drawCircle(gMatchSequence[ii], 0);
-        HAL_Delay(animDelay);
+
+        if (gGraphicsMode == LCD_SCREEN) {
+            drawCircle(gMatchSequence[ii], 1);
+            HAL_Delay(animDelay);
+            drawCircle(gMatchSequence[ii], 0);
+            HAL_Delay(animDelay);
+        }
+        if (gGraphicsMode == LED_MATRIX) {
+            drawGraphic(gMatchSequence[ii]);
+             HAL_Delay(animDelay);
+        }
     }
+       
     gGameState = COMPARE_SEQUENCE;
     BSP_LCD_Init();
     BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
@@ -140,14 +170,24 @@ int compareSequence() {
     for (int ii=0; ii < gSeqSize; ii++) {
         userMotionDirection = waitforGyroMotionDetection(xyzGyro);
         if (userMotionDirection == gMatchSequence[ii]) {
-            drawCircle(userMotionDirection,1);
+            if (gGraphicsMode == LCD_SCREEN) {
+                drawCircle(userMotionDirection,1);
+            } 
+            if (gGraphicsMode == LED_MATRIX) {
+                drawGraphic(userMotionDirection);
+                HAL_Delay(250);
+            }
             matches++;
             gScore++;
         } else {
             break;
         }
-        HAL_Delay(500);        
-        drawCircle(userMotionDirection,0);
+        if (gGraphicsMode == LCD_SCREEN) {   
+            drawCircle(userMotionDirection,0);
+            HAL_Delay(500);
+        }
+       
+        
     }
     if (matches == gSeqSize) {
         gGameState = INCREMENT_SEQUENCE_SIZE;

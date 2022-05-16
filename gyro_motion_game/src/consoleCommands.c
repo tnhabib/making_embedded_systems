@@ -19,10 +19,11 @@
 #include "gyro_util.h"
 #include "stm32f429i_discovery_lcd.h"
 #include "game.h"
+#include "matrix_util.h"
 #include <string.h>
 
 #define IGNORE_UNUSED_VARIABLE(x)     if ( &x == &x ) {}
-
+extern int debugMode;
 
 
 static eCommandResult_T ConsoleCommandComment(const char buffer[]);
@@ -30,7 +31,7 @@ static eCommandResult_T ConsoleCommandVer(const char buffer[]);
 static eCommandResult_T ConsoleCommandHelp(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleInt16(const char buffer[]);
 static eCommandResult_T ConsoleCommandParamExampleHexUint16(const char buffer[]);
-static eCommandResult_T ConsoleCommandDrawCircle(const char buffer[]);
+static eCommandResult_T ConsoleCommandDrawGraphic(const char buffer[]);
 static eCommandResult_T ConsoleCommandGetGyroMotion(const char buffer[]);
 static eCommandResult_T ConsoleCommandSetGyroTolerance(const char buffer[]);
 static eCommandResult_T ConsoleCommandGetGyroSample(const char buffer[]);
@@ -39,15 +40,15 @@ static eCommandResult_T ConsoleCommandPrintSequence(const char buffer[]);
 static eCommandResult_T ConsoleCommandIncrementSequence(const char buffer[]);
 static eCommandResult_T ConsoleCommandPlaySequence(const char buffer[]);
 static eCommandResult_T ConsoleCommandCompareSequence(const char buffer[]);
+static eCommandResult_T ConsoleCommandSetGraphicsMode(const char buffer[]);
+static eCommandResult_T ConsoleCommandSetDebugMode(const char buffer[]);
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
 {
     {";", &ConsoleCommandComment, HELP("Comment! You do need a space after the semicolon. ")},
     {"help", &ConsoleCommandHelp, HELP("Lists the commands available")},
     {"ver", &ConsoleCommandVer, HELP("Get the version string")},
-    {"int", &ConsoleCommandParamExampleInt16, HELP("How to get a signed int16 from params list: int -321")},
-    {"u16h", &ConsoleCommandParamExampleHexUint16, HELP("How to get a hex u16 from the params list: u16h aB12")},
-    {"drawC", &ConsoleCommandDrawCircle, HELP("Draws a circle (1,2,3,4) for the playfiled")},
+    {"drawG", &ConsoleCommandDrawGraphic, HELP("Draws a graphic (direction 1,2,3,4) for the playfiled")},
 	{"getGM", &ConsoleCommandGetGyroMotion, HELP("Polls and returns the Gyro Motion detected")},
 	{"setGT", &ConsoleCommandSetGyroTolerance, HELP("Set the Gyro Motion Tolerance")},
 	{"getGSample", &ConsoleCommandGetGyroSample, HELP("Get N number of Gyro Sample separate by 10ms")},
@@ -56,10 +57,30 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
 	{"incSeq", &ConsoleCommandIncrementSequence, HELP("Add to the sequence")},
 	{"playSeq", &ConsoleCommandPlaySequence, HELP("Play the sequence")},
 	{"cmpSeq", &ConsoleCommandCompareSequence, HELP("Compare user input to the sequence")},
+	{"setModeG", &ConsoleCommandSetGraphicsMode, HELP("Set the Graphics Mode (1- LCD, 2 - LED MATRIX ")},
+	{"setD", &ConsoleCommandSetDebugMode, HELP("Set the Debug Mode (1- Debug On, 0 - Debug Off ")},
+	
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
 
+static eCommandResult_T ConsoleCommandSetDebugMode(const char buffer[]) {
+	int16_t mode;
+	char debugStr[50];
+	ConsoleReceiveParamInt16(buffer, 1, &mode);
+	debugMode = mode;
+	sprintf(debugStr, "Setting Debug to %d", debugMode);
+	ConsoleIoSendString(debugStr);
+	ConsoleIoSendString(STR_ENDLINE);
+	return CONSOLE_SUCCESS;
+}
+static eCommandResult_T ConsoleCommandSetGraphicsMode(const char buffer[]) {
+	int16_t mode;
+	ConsoleReceiveParamInt16(buffer, 1, &mode);
+	setGraphicsMode(mode);
+	ConsoleIoSendString(STR_ENDLINE);
+	return CONSOLE_SUCCESS;
+}
 
 static eCommandResult_T ConsoleCommandCompareSequence(const char buffer[]) {
 	char matchStr[50];
@@ -174,12 +195,21 @@ static eCommandResult_T ConsoleCommandGetGyroMotion(const char buffer[]) {
 	return COMMAND_SUCCESS;
 }
 
-static eCommandResult_T ConsoleCommandDrawCircle(const char buffer[]) {
+static eCommandResult_T ConsoleCommandDrawGraphic(const char buffer[]) {
 
 	int16_t circleLocation;
+	enum GraphicsMode graphicsMode;
+	graphicsMode = getGraphicsMode();
 	ConsoleReceiveParamInt16(buffer, 1, &circleLocation);
-	BSP_LCD_Clear(LCD_COLOR_WHITE);
-	drawCircle(circleLocation, 1);
+	if (graphicsMode == LCD_SCREEN) {
+		BSP_LCD_Clear(LCD_COLOR_WHITE);
+		drawCircle(circleLocation, 1);
+	}
+
+	if (graphicsMode == LED_MATRIX) {
+		drawGraphic(circleLocation);		
+	}
+
 	ConsoleIoSendString(STR_ENDLINE);
 	return COMMAND_SUCCESS;
 	

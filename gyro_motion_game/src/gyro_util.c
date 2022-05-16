@@ -11,11 +11,12 @@
 static int gyroPollDelay = 50;
 static float gyroMotionTolerance = 100000.0f;
 
+extern int gyroTimerCount;
 
 #define ABS(x)         (x < 0) ? (-x) : x
-static void Error_Handler(void);
 
-volatile int timerCount = 0;
+
+
 TIM_HandleTypeDef    TimHandle;
 uint32_t uwPreScalerValue;
 
@@ -27,17 +28,20 @@ void getGyroSample(float* xyzGyro) {
 
 
 int waitforGyroMotionDetection(float* xyzGyro) {
+    uint32_t uwPreScalerValue;
     BSP_LED_Init(LED3);
     BSP_LED_Init(LED4);
     int motionResult = -1;
     int motionDetected = 0;
-        TimHandle.Instance = TIMx;
+ 
+
       /* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz,
       Period is 20000 so that would be 2 seconds */
-    uwPrescalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
-    timerCount = 0;
+    uwPreScalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
+    gyroTimerCount = 0;
+    TimHandle.Instance = TIM3;
     TimHandle.Init.Period = 20000 - 1;
-    TimHandle.Init.Prescaler = uwPrescalerValue;
+    TimHandle.Init.Prescaler = uwPreScalerValue;
     TimHandle.Init.ClockDivision = 0;
     TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
     TimHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -52,7 +56,7 @@ int waitforGyroMotionDetection(float* xyzGyro) {
             Error_Handler();
     }
 
-    while (timerCount < 2 && !motionDetected) {
+    while (gyroTimerCount < 2 && !motionDetected) {
   
 
      
@@ -85,7 +89,7 @@ int waitforGyroMotionDetection(float* xyzGyro) {
         HAL_Delay(gyroPollDelay);
     }
     // timer Expired
-    if (timerCount >= 2) {
+    if (gyroTimerCount >= 2) {
         motionResult = -1;
        
     }
@@ -134,47 +138,7 @@ void Gyro_Init() {
 
 }
 
-
-
-
-static void Error_Handler(void)
-{
-  /* Turn LED4 on */
-  BSP_LED_On(LED4);
-  while(1)
-  {
-  }
-}
-
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-    
-     if (htim->Instance == TIM3) {
-        BSP_LED_Toggle(LED3);
-        timerCount++;
-     }
-   
-}
-
-
-
-void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
-{
-  /*##-1- Enable peripherals and GPIO Clocks #################################*/
-  /* TIMx Peripheral clock enable */
-  TIMx_CLK_ENABLE();
-
-  /*##-2- Configure the NVIC for TIMx ########################################*/
-  /* Set the TIMx priority */
-  HAL_NVIC_SetPriority(TIMx_IRQn, 0, 1);
-  
-  /* Enable the TIMx global Interrupt */
-  HAL_NVIC_EnableIRQ(TIMx_IRQn);
-
-}
-
-void TIMx_IRQHandler(void)
+void TIM3_IRQHandler(void)
 {
   HAL_TIM_IRQHandler(&TimHandle);
   
