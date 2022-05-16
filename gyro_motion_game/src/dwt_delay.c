@@ -99,5 +99,5 @@ void DWT_Delay(uint32_t us) // microseconds
 
     while (DWT->CYCCNT - startTick < delayTicks);
 
-
+}
 #endif
