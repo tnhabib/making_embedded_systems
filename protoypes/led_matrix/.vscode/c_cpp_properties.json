@@ -171,7 +171,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=50205",
+                "PLATFORMIO=60001",
                 "STM32F4",
                 "STM32F429xx",
                 "USE_HAL_DRIVER",

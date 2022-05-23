@@ -21,9 +21,13 @@
 #include "game.h"
 #include "matrix_util.h"
 #include <string.h>
+#include <stdlib.h>
 
 #define IGNORE_UNUSED_VARIABLE(x)     if ( &x == &x ) {}
 extern int debugMode;
+
+int unInitGlobal;
+int initGlobal = 9;
 
 
 static eCommandResult_T ConsoleCommandComment(const char buffer[]);
@@ -42,6 +46,7 @@ static eCommandResult_T ConsoleCommandPlaySequence(const char buffer[]);
 static eCommandResult_T ConsoleCommandCompareSequence(const char buffer[]);
 static eCommandResult_T ConsoleCommandSetGraphicsMode(const char buffer[]);
 static eCommandResult_T ConsoleCommandSetDebugMode(const char buffer[]);
+static eCommandResult_T ConsoleCommandDebugPrint(const char buffer[]);
 
 static const sConsoleCommandTable_T mConsoleCommandTable[] =
 {
@@ -59,11 +64,61 @@ static const sConsoleCommandTable_T mConsoleCommandTable[] =
 	{"cmpSeq", &ConsoleCommandCompareSequence, HELP("Compare user input to the sequence")},
 	{"setModeG", &ConsoleCommandSetGraphicsMode, HELP("Set the Graphics Mode (1- LCD, 2 - LED MATRIX ")},
 	{"setD", &ConsoleCommandSetDebugMode, HELP("Set the Debug Mode (1- Debug On, 0 - Debug Off ")},
+	{"dp", &ConsoleCommandDebugPrint, HELP("Print Some debug information (memory addresses) ")},
 	
 
 	CONSOLE_COMMAND_TABLE_END // must be LAST
 };
 
+static eCommandResult_T ConsoleCommandDebugPrint(const char buffer[]) {
+	int nonStaticVar = 4;
+	static int staticVar = 2;
+	char stack_info[60];
+	char bss_info[100];
+	char data_info[100];
+	char initGlobal_info[60];
+	char uniInitGlobal_info[60];
+	char staticVar_info[60];
+	char localVar_info[60];
+	char dynamicVar_info[60];
+	char *dynamic_var = malloc(4 * sizeof(char));
+	// register uintptr_t sp asm ("sp");
+	extern int _estack, __bss_start__, __bss_end__, _sdata, _edata;
+	sprintf(bss_info, "Bss start - %p, Bss end - %p ", &__bss_start__, &__bss_end__);
+    sprintf(stack_info, "Stack Pointer: %p", &_estack);
+	sprintf(data_info, "data start - %p, data end - %p ", &_sdata, &_edata);
+
+	sprintf(initGlobal_info,"Initialized Global (initGlobal) %p", &initGlobal);
+	sprintf(uniInitGlobal_info,"Uninitialized Global  (unInitGlobal) %p", &unInitGlobal);
+	sprintf(staticVar_info,"Static var in a function (staticVar) %p", &staticVar);
+	sprintf(localVar_info,"Variable (nonStaticVar) in a function %p", &nonStaticVar);
+	sprintf(dynamicVar_info,"Variable dynamically allocated(dynamicVar) - %p", &dynamic_var);
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(initGlobal_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(staticVar_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(data_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(STR_ENDLINE);
+
+	ConsoleIoSendString(uniInitGlobal_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(bss_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	
+	
+	ConsoleIoSendString(localVar_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(stack_info);
+	ConsoleIoSendString(STR_ENDLINE);
+
+	ConsoleIoSendString(STR_ENDLINE);
+	ConsoleIoSendString(dynamicVar_info);
+	ConsoleIoSendString(STR_ENDLINE);
+	
+	return CONSOLE_SUCCESS;
+}
 static eCommandResult_T ConsoleCommandSetDebugMode(const char buffer[]) {
 	int16_t mode;
 	char debugStr[50];

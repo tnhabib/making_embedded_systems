@@ -100,6 +100,7 @@ void drawGraphic(int direction) {
             Error_Handler();
     }
 
+    HUB75E_clearDisplayBuffer();
     while (matrixTimerCount < 2) {
         HUB75E_setDisplayBuffer(myBitmap);
         updateFunctions[graphicsDir](myBitmap, PIXELS_COUNT_IN_BYTES);

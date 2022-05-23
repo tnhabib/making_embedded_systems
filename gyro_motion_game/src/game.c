@@ -154,31 +154,46 @@ int playSequence() {
     }
        
     gGameState = COMPARE_SEQUENCE;
-    BSP_LCD_Init();
-    BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
-    BSP_LCD_SelectLayer(0);
-    BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"GO!!", CENTER_MODE);
+    // BSP_LCD_Init();
+    // BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
+    // BSP_LCD_SelectLayer(0);
+    // BSP_LCD_Clear(LCD_COLOR_WHITE);
+    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"GO!!");
     HAL_Delay(500);
+    BSP_LCD_ClearStringLine(1);
+    // BSP_LCD_Clear(LCD_COLOR_WHITE);
     return 0;
 }
 
+void updateScoreDisplay() {
+    char scoreStr[20];
+\
+    // BSP_LCD_Clear(LCD_COLOR_WHITE);
+    sprintf(scoreStr, "Score: %d", gScore);
+    BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
+    
+}
 int compareSequence() {
     int matches = 0;
     int userMotionDirection;
     float xyzGyro[3];
+
   
     for (int ii=0; ii < gSeqSize; ii++) {
         userMotionDirection = waitforGyroMotionDetection(xyzGyro);
         if (userMotionDirection == gMatchSequence[ii]) {
+            matches++;
+            gScore++;
             if (gGraphicsMode == LCD_SCREEN) {
                 drawCircle(userMotionDirection,1);
             } 
             if (gGraphicsMode == LED_MATRIX) {
                 drawGraphic(userMotionDirection);
+                updateScoreDisplay();
                 HAL_Delay(250);
             }
-            matches++;
-            gScore++;
+            
+         
         } else {
             break;
         }

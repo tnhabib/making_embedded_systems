@@ -3,6 +3,7 @@
 #include "stm32f4xx_hal.h"
 #include "gyro_util.h"
 #include "main.h"
+#include "game.h"
 
 #define TIMx                           TIM3
 #define TIMx_CLK_ENABLE                __HAL_RCC_TIM3_CLK_ENABLE
@@ -34,7 +35,8 @@ int waitforGyroMotionDetection(float* xyzGyro) {
     int motionResult = -1;
     int motionDetected = 0;
  
-
+    enum GraphicsMode graphicsMode;
+    graphicsMode = getGraphicsMode();
       /* Compute the prescaler value to have TIM3 counter clock equal to 10 KHz,
       Period is 20000 so that would be 2 seconds */
     uwPreScalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
@@ -46,8 +48,10 @@ int waitforGyroMotionDetection(float* xyzGyro) {
     TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
     TimHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 
-   
-    BSP_LCD_Clear(LCD_COLOR_WHITE);
+    if (graphicsMode == LCD_SCREEN) {
+      BSP_LCD_Clear(LCD_COLOR_WHITE);
+    }
+    
     HAL_TIM_Base_Init(&TimHandle);
  
     if(HAL_TIM_Base_Start_IT(&TimHandle) != HAL_OK)

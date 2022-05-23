@@ -18,6 +18,7 @@ int startGame();
 int gameOver();
 enum GraphicsMode getGraphicsMode(); 
 void setGraphicsMode(int16_t mode);
+void updateScoreDisplay();
 
 enum GraphicsMode {
     LCD_SCREEN,

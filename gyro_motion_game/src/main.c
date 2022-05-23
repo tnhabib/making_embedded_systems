@@ -22,8 +22,8 @@ static void SystemClock_Config(void);
 #define USER_BUTTON_CLK_ENABLE() __HAL_RCC_GPIOA_CLK_ENABLE()
 
 // global variables
- int gyroTimerCount = 0;
- int matrixTimerCount = 0;
+ volatile int gyroTimerCount = 0;
+ volatile int matrixTimerCount = 0;
  int debugMode = 0;
 
 int main(void) {
