@@ -145,12 +145,12 @@ int playSequence() {
             drawCircle(gMatchSequence[ii], 1);
             HAL_Delay(animDelay);
             drawCircle(gMatchSequence[ii], 0);
-            HAL_Delay(animDelay);
         }
         if (gGraphicsMode == LED_MATRIX) {
             drawGraphic(gMatchSequence[ii]);
-             HAL_Delay(animDelay);
         }
+
+        HAL_Delay(animDelay);
     }
        
     gGameState = COMPARE_SEQUENCE;
@@ -168,6 +168,7 @@ void updateScoreDisplay() {
     BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
     
 }
+
 int compareSequence() {
     int matches = 0;
     int userMotionDirection;
