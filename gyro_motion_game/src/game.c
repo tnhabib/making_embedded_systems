@@ -154,21 +154,16 @@ int playSequence() {
     }
        
     gGameState = COMPARE_SEQUENCE;
-    // BSP_LCD_Init();
-    // BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
-    // BSP_LCD_SelectLayer(0);
-    // BSP_LCD_Clear(LCD_COLOR_WHITE);
     BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"GO!!");
     HAL_Delay(500);
     BSP_LCD_ClearStringLine(1);
-    // BSP_LCD_Clear(LCD_COLOR_WHITE);
+
     return 0;
 }
 
 void updateScoreDisplay() {
     char scoreStr[20];
-\
-    // BSP_LCD_Clear(LCD_COLOR_WHITE);
+ 
     sprintf(scoreStr, "Score: %d", gScore);
     BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
     
