@@ -9,14 +9,13 @@ START_GAME: Reset Sequence
 START_GAME: Select 1st Element
 START_GAME --> PLAY_SEQUENCE
 PLAY_SEQUENCE: Play Sequence
-PLAY_SEQUENCE-> WAIT
-WAIT: Reset Timer
-WAIT --> GAME_OVER : Input did not match / \nTime Expired
+PLAY_SEQUENCE-> COMPARE_SEQUENCE
+COMPARE_SEQUENCE: Reset Timer, Compare input across sequence in a loop
+COMPARE_SEQUENCE --> GAME_OVER : Input did not match / \nTime Expired
 GAME_OVER: Show Score
 GAME_OVER: Delay
 GAME_OVER-> START
-WAIT-->INCREMENT_SEQUENCE_INDEX: "Gyro direction matched\n current index"
-WAIT-->INCREMENT_SEQUENCE_SIZE: Gyro matched last index
+COMPARE_SEQUENCE-->INCREMENT_SEQUENCE_SIZE: Gyro matched last index
 INCREMENT_SEQUENCE_INDEX: Increment Sequence Index
 INCREMENT_SEQUENCE_INDEX-> WAIT: Not Last index
 INCREMENT_SEQUENCE_INDEX--> INCREMENT_SEQUENCE_SIZE: Last index
