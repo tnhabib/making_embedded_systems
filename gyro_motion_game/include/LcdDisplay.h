@@ -7,5 +7,6 @@ void drawCircle(int circleLocation, int filled);
 void drawTitleScreen();
 void drawGameOverScreen();
 void updateScoreDisplay();
+void drawGoText();
 
 #endif // LCDDISPLAY_H

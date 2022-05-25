@@ -141,10 +141,8 @@ int playSequence() {
     }
        
     gGameState = COMPARE_SEQUENCE;
-    BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"GO!!");
-    HAL_Delay(500);
-    BSP_LCD_ClearStringLine(1);
-
+    drawGoText();
+    
     return 0;
 }
 

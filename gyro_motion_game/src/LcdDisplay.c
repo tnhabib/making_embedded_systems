@@ -71,3 +71,10 @@ void updateScoreDisplay() {
     BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
     
 }
+
+void drawGoText() {
+	BSP_LCD_DisplayStringAtLine(1, (uint8_t*)"GO!!");
+    HAL_Delay(500);
+    BSP_LCD_ClearStringLine(1);
+
+}
