@@ -13,6 +13,9 @@ static enum GameState gGameState = TITLE_SCREEN;
 
 #define ABS(x)         (x < 0) ? (-x) : x
 
+int getGameScore() {
+    return gScore;
+}
 static const sGameStateMap theGameStateMap[] = 
 {
     {TITLE_SCREEN, titleScreen},
@@ -51,6 +54,7 @@ enum GameState getGameState() {
 void setGameState(enum GameState state) {
     gGameState = state;
 }
+
 void nextGameState(enum GameState state) {
     int idx = 0;
     int found = 0;
@@ -79,9 +83,7 @@ int titleScreen() {
     // reset game properties
     gScore = 0;
     gSeqSize = 0;
-     BSP_LCD_SetFont(&Font16);
-    BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Gyro Motion", CENTER_MODE);
-    BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to Start", CENTER_MODE);
+    drawTitleScreen();
 
     return 0;
 
@@ -89,22 +91,7 @@ int titleScreen() {
 
 int gameOver() {
     
-    uint8_t scoreStr[40];
-
-    BSP_LCD_Init();
-    BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
-    BSP_LCD_SelectLayer(0);
-
-
-    BSP_LCD_SetFont(&Font16);
-    BSP_LCD_ClearStringLine(1);
-    BSP_LCD_ClearStringLine(2);
-    BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Game Over", CENTER_MODE);
-    sprintf((char *)scoreStr, "Score : %d", gScore);
-    BSP_LCD_DisplayStringAt(0,125, (uint8_t*)scoreStr, CENTER_MODE);
-    
-    BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to ", CENTER_MODE);
-    BSP_LCD_DisplayStringAt(0,170, (uint8_t*)"Start New Game", CENTER_MODE);
+    drawGameOverScreen();
     return 0;
 }
 int * getMatchSequence() {
@@ -161,13 +148,7 @@ int playSequence() {
     return 0;
 }
 
-void updateScoreDisplay() {
-    char scoreStr[20];
- 
-    sprintf(scoreStr, "Score: %d", gScore);
-    BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
-    
-}
+
 
 int compareSequence() {
     int matches = 0;

@@ -33,7 +33,7 @@ int main(void) {
   HAL_Init();
 
   SystemClock_Config();
-    
+  DWT_Init();
   MX_NVIC_Init();
   
   UserButton_Init();
@@ -193,6 +193,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *htim)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     
+    // Matrix Animation Timer
     if (htim->Instance == TIM2) {
         matrixTimerCount++;
         if (matrixTimerCount > 1) {
@@ -201,7 +202,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         }
     }
    
-    
+    // User game Input timer
      if (htim->Instance == TIM3) {
         BSP_LED_Toggle(LED3);
         gyroTimerCount++;

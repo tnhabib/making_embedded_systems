@@ -4,6 +4,8 @@
 #include "stm32f429i_discovery_lcd.h"
 
 void drawCircle(int circleLocation, int filled);
-
+void drawTitleScreen();
+void drawGameOverScreen();
+void updateScoreDisplay();
 
 #endif // LCDDISPLAY_H

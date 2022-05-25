@@ -1,5 +1,6 @@
 #include "LcdDisplay.h"
-
+#include "game.h"
+#include <stdio.h>
 
 void drawCircle(int circleLocation, int filled) {
     int x, y, radius;
@@ -36,4 +37,37 @@ void drawCircle(int circleLocation, int filled) {
 		BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
 	}
 	BSP_LCD_FillCircle(x, y, radius);
+}
+
+void drawTitleScreen() {
+	BSP_LCD_SetFont(&Font16);
+    BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Gyro Motion", CENTER_MODE);
+    BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to Start", CENTER_MODE);
+}
+
+void drawGameOverScreen() {
+	uint8_t scoreStr[40];
+	int gameScore = getGameScore();
+    BSP_LCD_Init();
+    BSP_LCD_LayerDefaultInit(0, LCD_FRAME_BUFFER);
+    BSP_LCD_SelectLayer(0);
+
+	BSP_LCD_Clear(LCD_COLOR_WHITE);
+
+    BSP_LCD_SetFont(&Font16);
+ 
+    BSP_LCD_DisplayStringAt(0,100, (uint8_t*)"Game Over", CENTER_MODE);
+    sprintf((char *)scoreStr, "Score : %d", gameScore);
+    BSP_LCD_DisplayStringAt(0,125, (uint8_t*)scoreStr, CENTER_MODE);
+    
+    BSP_LCD_DisplayStringAt(0,150, (uint8_t*)"Press Button to ", CENTER_MODE);
+    BSP_LCD_DisplayStringAt(0,170, (uint8_t*)"Start New Game", CENTER_MODE);
+}
+
+void updateScoreDisplay() {
+    char scoreStr[20];
+ 	int gameScore = getGameScore();
+    sprintf(scoreStr, "Score: %d", gameScore);
+    BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
+    
 }
