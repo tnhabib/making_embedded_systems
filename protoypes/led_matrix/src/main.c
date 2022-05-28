@@ -15,7 +15,9 @@ void Error_Handler(void);
 
 
 
+#include <stdint.h>
 
+extern unsigned char myBitmap2[PIXELS_COUNT_IN_BYTES];
 int main(void) {
  
 
@@ -39,11 +41,9 @@ int main(void) {
     // HUB75E_displayBufferPixels(myBitmap);
 
 
-    
 
 
-    drawGrapic(1);
-    drawGrapic(2);
+    animateX(myBitmap2, PIXELS_COUNT_IN_BYTES);
     while(1) {
       //  playSequenceLoop();
         // HUB75E_displayBufferPixels(myBitmap);
