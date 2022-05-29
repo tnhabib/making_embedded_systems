@@ -11,7 +11,7 @@ void clearBuffer(bitmap, bitmap_size);
 void playSequenceLoop();
 void drawGrapic(int direction);
 void animateX(unsigned char*bitmap, int bitmap_size);
-void animateY(unsigned char*bitmap, int bitmap_size);
+void animateSmiley(unsigned char*bitmap, int bitmap_size);
 
 
 #endif

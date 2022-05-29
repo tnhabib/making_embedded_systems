@@ -11,6 +11,9 @@ void Error_Handler(void);
 #include "dwt_delay.h"
 
 #include "matrix_util.h"
+#include "matrix_util.h"
+#include <string.h>
+#include <stdio.h>
 
 
 
@@ -35,15 +38,17 @@ int main(void) {
     // MX_NVIC_Init();
 
     HUB75E_Init();
+    HUB75E_setDisplayBrightness(BrightnessLevel3);
     // HUB75E_setDisplayBuffer(myBitmap);
     // HUB75E_setDisplayBrightness(BrightnessLevel3);
     // HUB75E_setDisplayColor(Red);
     // HUB75E_displayBufferPixels(myBitmap);
 
 
-
-
     animateX(myBitmap2, PIXELS_COUNT_IN_BYTES);
+    memset(myBitmap2, 0, sizeof(myBitmap2));
+    clearBuffer();
+    animateSmiley(myBitmap2, PIXELS_COUNT_IN_BYTES);
     while(1) {
       //  playSequenceLoop();
         // HUB75E_displayBufferPixels(myBitmap);

@@ -35,7 +35,14 @@ graphic_buffer_update_function updateFunctions[4] = {
     fillBottomRectBuffer
 };
 
+void refresh_display(unsigned char *bitmap, int num_loops) {
+    for (int kk=0; kk < num_loops; kk++) {
+         HUB75E_setDisplayBuffer(bitmap);
+         HUB75E_displayBufferPixels(bitmap);
+    }
 
+
+}
 void animateX(unsigned char*bitmap, int bitmap_size) {
     HUB75E_clearDisplayBuffer();
     clearBuffer(bitmap, bitmap_size);
@@ -123,33 +130,137 @@ void animateX(unsigned char*bitmap, int bitmap_size) {
     };
     
   
-    for (int ii=0; ii < sizeof(pixel_list) / sizeof(int); ii+=2) {
+    drawPixels(pixel_list, sizeof(pixel_list) / sizeof (int), bitmap);
+
+    refresh_display(bitmap, 1500);
+}
+
+void drawPixels (int *pixel_list, int pixel_list_size, unsigned char *bitmap) {
+    for (int ii=0; ii < pixel_list_size; ii+=2) {
         int idx = pixel_list[ii];
         int pixels = pixel_list[ii+1];
         bitmap[idx] = pixels;
-        for (int jj=0; jj < 10; jj++) {
+        for (int jj=0; jj < 3; jj++) {
             HUB75E_setDisplayBuffer(bitmap);
             HUB75E_displayBufferPixels(bitmap);
         }
         
     }
-
-    for (int kk=0; kk < 1500; kk++) {
-         HUB75E_setDisplayBuffer(bitmap);
-         HUB75E_displayBufferPixels(bitmap);
-    }
 }
+void animateSmiley(unsigned char*bitmap, int bitmap_size) {
 
-void animateO(unsigned char*bitmap, int bitmap_size) {
+    HUB75E_clearDisplayBuffer();
+    clearBuffer(bitmap, bitmap_size);
+    HUB75E_setDisplayColor(Green);
+    
+    int circle_list[] = {
+        3, 3,
+        4, 240,
+        11, 28, 
+       
+        19, 32,
+        27, 64,
+        35, 128,
+        42, 1,
+        50, 2,
+        58, 4, // eyes start here
+        66, 4,
+        74, 8,
+        82, 8,
+        90, 8,
+        
+        98,  16,
+        106, 16,
+        114, 16,
+        122, 16,
+        130, 16,
+        138, 16, // smile starts here
+        146, 16,
 
-   
-    HUB75E_setDisplayColor(Yellow);
-    while (1)
-    {
-        HUB75E_setDisplayBuffer(bitmap);
-        HUB75E_displayBufferPixels(bitmap);
+        154, 8,
+        162, 8,
+        170, 8,
 
-    }
+        178, 4,
+        186, 4,
+
+        194, 2,
+        202, 1,
+        211, 128,
+        219, 64,
+        227, 32,
+        235, 28,
+        243, 3,
+        244, 240,
+        213, 64,
+        221, 128,
+        228, 1,
+        236, 14,
+        205, 32,
+        197, 16,
+        181, 8,
+        189, 8,
+        173, 4,
+        165, 4,
+        157, 4,
+        
+        149, 2,
+        141, 2,
+        133, 2,
+        125, 2,
+        117, 2,
+        109, 2,
+        101, 2,
+
+        93, 4,
+        85, 4,
+        77, 4,
+
+        69, 8,
+        61, 8,
+
+        53, 16,
+        45, 32,
+        37, 64,
+        29, 128,
+        20, 1,
+
+        12, 14
+    };
+
+    drawPixels(circle_list, sizeof(circle_list) / sizeof(int), bitmap);
+
+    int face_list[] = {
+        59, 24,
+        67, 24,
+        75, 24,
+
+        60, 6,
+        68, 6,
+        76, 6,
+
+        138, 23,
+        139, 192,
+        146, 17,
+        154, 9,
+        155, 128,
+        163, 192,
+        171, 96,
+        179, 48,
+        187, 31,
+        188, 254,
+        180, 3,
+        172, 1,
+        173, 132,
+        165, 196,
+        157, 100,
+        149, 34,
+        141, 250,
+    };
+     
+    drawPixels(face_list, sizeof(face_list) / sizeof(int), bitmap);
+    refresh_display(bitmap, 1500);
+
 }
 
 void clearBuffer(unsigned char * bitmap, int bitmap_size) {
@@ -158,7 +269,7 @@ void clearBuffer(unsigned char * bitmap, int bitmap_size) {
     HUB75E_setDisplayColor(Black);
     HUB75E_displayBufferPixels(bitmap);
     HUB75E_clearDisplayBuffer();
-    // HAL_Delay(250);
+    HAL_Delay(250);
    
 }
 void fillLeftRectBuffer(unsigned char*bitmap, int bitmap_size) {
