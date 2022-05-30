@@ -44,11 +44,12 @@ int main(void) {
     // HUB75E_setDisplayColor(Red);
     // HUB75E_displayBufferPixels(myBitmap);
 
-
+   animateSmiley(myBitmap2, PIXELS_COUNT_IN_BYTES);
     animateX(myBitmap2, PIXELS_COUNT_IN_BYTES);
     memset(myBitmap2, 0, sizeof(myBitmap2));
     clearBuffer();
-    animateSmiley(myBitmap2, PIXELS_COUNT_IN_BYTES);
+    HAL_Delay(250);
+  
     while(1) {
       //  playSequenceLoop();
         // HUB75E_displayBufferPixels(myBitmap);

@@ -47,7 +47,7 @@ void animateX(unsigned char*bitmap, int bitmap_size) {
     HUB75E_clearDisplayBuffer();
     clearBuffer(bitmap, bitmap_size);
     HUB75E_setDisplayColor(Red);
-    int pixel_list[] = {
+     unsigned char pixel_list[] = {
         0,  192,
         7, 3,
         248, 192,
@@ -130,12 +130,12 @@ void animateX(unsigned char*bitmap, int bitmap_size) {
     };
     
   
-    drawPixels(pixel_list, sizeof(pixel_list) / sizeof (int), bitmap);
+    drawPixels(pixel_list, sizeof(pixel_list) / sizeof (unsigned char), bitmap);
 
     refresh_display(bitmap, 1500);
 }
 
-void drawPixels (int *pixel_list, int pixel_list_size, unsigned char *bitmap) {
+void drawPixels (unsigned char *pixel_list, int pixel_list_size, unsigned char *bitmap) {
     for (int ii=0; ii < pixel_list_size; ii+=2) {
         int idx = pixel_list[ii];
         int pixels = pixel_list[ii+1];
@@ -153,7 +153,7 @@ void animateSmiley(unsigned char*bitmap, int bitmap_size) {
     clearBuffer(bitmap, bitmap_size);
     HUB75E_setDisplayColor(Green);
     
-    int circle_list[] = {
+    unsigned char circle_list[] = {
         3, 3,
         4, 240,
         11, 28, 
@@ -228,9 +228,9 @@ void animateSmiley(unsigned char*bitmap, int bitmap_size) {
         12, 14
     };
 
-    drawPixels(circle_list, sizeof(circle_list) / sizeof(int), bitmap);
+    drawPixels(circle_list, sizeof(circle_list) / sizeof(unsigned char), bitmap);
 
-    int face_list[] = {
+    unsigned char face_list[] = {
         59, 24,
         67, 24,
         75, 24,
@@ -258,7 +258,7 @@ void animateSmiley(unsigned char*bitmap, int bitmap_size) {
         141, 250,
     };
      
-    drawPixels(face_list, sizeof(face_list) / sizeof(int), bitmap);
+    drawPixels(face_list, sizeof(face_list) / sizeof(unsigned char), bitmap);
     refresh_display(bitmap, 1500);
 
 }
