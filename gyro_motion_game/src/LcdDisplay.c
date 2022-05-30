@@ -67,6 +67,7 @@ void drawGameOverScreen() {
 void updateScoreDisplay() {
     char scoreStr[20];
  	int gameScore = getGameScore();
+	BSP_LCD_SetFont(&Font24);
     sprintf(scoreStr, "Score: %d", gameScore);
     BSP_LCD_DisplayStringAtLine(2, (uint8_t*)scoreStr);
     

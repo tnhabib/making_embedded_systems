@@ -10,5 +10,6 @@ void playSequenceLoop();
 void drawGraphic(int direction);
 void animateX();
 void animateSmiley();
+void animateGo();
 
 #endif

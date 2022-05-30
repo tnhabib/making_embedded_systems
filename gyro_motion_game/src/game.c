@@ -144,6 +144,9 @@ int playSequence() {
 
         HAL_Delay(animDelay);
     }
+    if (gGraphicsMode == LED_MATRIX) {
+        animateGo();
+    }
        
     gGameState = COMPARE_SEQUENCE;
     drawGoText();
