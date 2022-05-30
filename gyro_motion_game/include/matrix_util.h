@@ -9,5 +9,6 @@ void clearBuffer();
 void playSequenceLoop();
 void drawGraphic(int direction);
 void animateX();
+void animateSmiley();
 
 #endif

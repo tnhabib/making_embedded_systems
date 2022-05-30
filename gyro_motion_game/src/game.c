@@ -4,6 +4,7 @@
 #include "LcdDisplay.h"
 #include "matrix_util.h"
 #include <stdio.h>
+#include "HUB75ELib.h"
 
 static int gMatchSequence[100];
 static int gSeqSize;
@@ -174,7 +175,10 @@ int compareSequence() {
             
          
         } else {
-             animateX();
+            if (gGraphicsMode == LED_MATRIX) {
+                animateX();
+            }
+           
             break;
         }
         if (gGraphicsMode == LCD_SCREEN) {   
@@ -185,6 +189,10 @@ int compareSequence() {
         
     }
     if (matches == gSeqSize) {
+         if (gGraphicsMode == LED_MATRIX) {
+                animateSmiley();
+         }
+           
         gGameState = INCREMENT_SEQUENCE_SIZE;
     } else {
         gGameState = GAME_OVER;
