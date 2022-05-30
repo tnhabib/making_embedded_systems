@@ -69,18 +69,21 @@ void nextGameState(enum GameState state) {
 
 int startGame() {
 
-  // reset game properties
+  // reset game properties, and clear displays
+    HUB75E_clearDisplayBuffer();
     gScore = 0;
     gSeqSize = 0;
     BSP_LCD_Clear(LCD_COLOR_WHITE);
     incMatchSequence();
     gGameState = PLAY_SEQUENCE;
 
+  
     return 0;
 }
 
 int titleScreen() {
     // reset game properties
+     HUB75E_clearDisplayBuffer();
     gScore = 0;
     gSeqSize = 0;
     drawTitleScreen();
@@ -125,6 +128,7 @@ int getRandomValue() {
 }
 
 int playSequence() {
+     
     int animDelay = 1000;
     for (int ii=0; ii < gSeqSize; ii++) {
 
@@ -170,6 +174,7 @@ int compareSequence() {
             
          
         } else {
+             animateX();
             break;
         }
         if (gGraphicsMode == LCD_SCREEN) {   

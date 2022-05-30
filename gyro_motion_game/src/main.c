@@ -52,6 +52,7 @@ int main(void) {
 
   // set LED Matrix
   HUB75E_Init();
+  HUB75E_clearDisplayBuffer();
 
   // LEDs for DEBUGGING, extra feedback
   BSP_LED_Init(LED3);
