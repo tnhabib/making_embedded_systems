@@ -149,7 +149,10 @@ int playSequence() {
     }
        
     gGameState = COMPARE_SEQUENCE;
-    drawGoText();
+    if (gGraphicsMode == LCD_SCREEN) {
+        drawGoText();
+    }
+    
     
     return 0;
 }

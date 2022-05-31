@@ -6,7 +6,7 @@
 #include "stm32f429i_discovery.h"
 #include "main.h"
 
-static unsigned char myBitmap[PIXELS_COUNT_IN_BYTES];
+volatile static unsigned char myBitmap[PIXELS_COUNT_IN_BYTES];
 
 
 TIM_HandleTypeDef    TimHandle;
