@@ -148,12 +148,12 @@ int playSequence() {
         animateGo();
     }
        
-    gGameState = COMPARE_SEQUENCE;
+  
     if (gGraphicsMode == LCD_SCREEN) {
         drawGoText();
     }
     
-    
+    gGameState = COMPARE_SEQUENCE;
     return 0;
 }
 
@@ -181,6 +181,8 @@ int compareSequence() {
             
          
         } else {
+            // timeout , or user motion didn't match current direction
+            // being compared against
             if (gGraphicsMode == LED_MATRIX) {
                 animateX();
             }
@@ -194,6 +196,7 @@ int compareSequence() {
        
         
     }
+    // Sequence completely matched
     if (matches == gSeqSize) {
          if (gGraphicsMode == LED_MATRIX) {
                 animateSmiley();
@@ -201,6 +204,7 @@ int compareSequence() {
            
         gGameState = INCREMENT_SEQUENCE_SIZE;
     } else {
+        // user didn't match, so GAME OVER
         gGameState = GAME_OVER;
     }
     HAL_Delay(500);

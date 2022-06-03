@@ -52,7 +52,7 @@ int main(void) {
 
   // set LED Matrix
   HUB75E_Init();
-  clearBuffer();
+  clearMatrixDisplay();
   HUB75E_clearDisplayBuffer();
 
   // LEDs for DEBUGGING, extra feedback

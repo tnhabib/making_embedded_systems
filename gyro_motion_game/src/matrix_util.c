@@ -6,7 +6,7 @@
 #include "stm32f429i_discovery.h"
 #include "main.h"
 
-volatile static unsigned char myBitmap[PIXELS_COUNT_IN_BYTES];
+static unsigned char myBitmap[PIXELS_COUNT_IN_BYTES];
 
 
 TIM_HandleTypeDef    TimHandle;
@@ -26,7 +26,7 @@ graphic_buffer_update_function updateFunctions[4] = {
     fillBottomRectBuffer
 };
 
-void clearBuffer() {
+void clearMatrixDisplay() {
     HUB75E_setDisplayBuffer(myBitmap);
     memset(myBitmap,0, PIXELS_COUNT_IN_BYTES);
     HUB75E_setDisplayColor(Black);
@@ -173,7 +173,7 @@ void drawPixels (unsigned char *pixel_list, int pixel_list_size, unsigned char *
 
 void animateX() {
     HUB75E_clearDisplayBuffer();
-    clearBuffer();
+    clearMatrixDisplay();
     HUB75E_setDisplayColor(Red);
     unsigned char pixel_list[] = {
         0,  192,
@@ -262,13 +262,13 @@ void animateX() {
 
     refresh_display(myBitmap, 1500);
 
-    clearBuffer();
+    clearMatrixDisplay();
 }
 
 void animateSmiley() {
 
     HUB75E_clearDisplayBuffer();
-    clearBuffer();
+    clearMatrixDisplay();
     HUB75E_setDisplayColor(Green);
     
     unsigned char circle_list[] = {
@@ -383,7 +383,7 @@ void animateSmiley() {
 
 void animateGo() {
     HUB75E_clearDisplayBuffer();
-    clearBuffer();
+    clearMatrixDisplay();
     HUB75E_setDisplayColor(Green);
     unsigned char g_pixel_list[] = {
         17, 255,

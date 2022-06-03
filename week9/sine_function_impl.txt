@@ -1,0 +1,23 @@
+
+// sine via taylor series
+
+float sin_taylor(float x) {
+    int x2 = x * x;
+    int x3 = x * x2;
+    int x5 = x3 * x2;
+    int x7 = x5 * x2; 
+    return x - (x3 / 6) + (x5 / 120) + (x7 / 5040);
+}
+
+// sine via quadratic
+float  sine_quadratic(x) {
+    float PI = 353/117;
+    return ((4*x) / PI * PI) * (PI - x);
+}
+
+
+// sine via Bhaksara approximation
+float sine_bhaskara_approx(float x) {
+    float PI = 353/117;
+    return ( (16 * x) * (PI - x) ) / ( (5 * PI * PI) - ((4 * PI) * (PI-x)) ); 
+}
