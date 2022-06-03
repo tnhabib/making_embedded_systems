@@ -112,32 +112,6 @@ void drawGraphic(int direction) {
     HAL_TIM_Base_Stop_IT(&TimHandle);
 }
 
-void playSequenceLoop() {
-  
-    uwPrescalerValue = (uint32_t) ((SystemCoreClock /2) / 10000) - 1;
-    TimHandle.Instance = TIM2;
-    TimHandle.Init.Period = 10000 - 1;
-    TimHandle.Init.Prescaler = uwPrescalerValue;
-    TimHandle.Init.ClockDivision = 0;
-    TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
-    TimHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    HAL_TIM_Base_Init(&TimHandle);
- 
-    if(HAL_TIM_Base_Start_IT(&TimHandle) != HAL_OK)
-    {
-            /* Starting Error */
-            Error_Handler();
-    }
-
-
-
-    while (1) {
-        HUB75E_setDisplayBuffer(myBitmap);
-        updateFunctions[graphicDirection %4](myBitmap, PIXELS_COUNT_IN_BYTES);
-        HUB75E_setDisplayBrightness(BrightnessLevel3);
-        HUB75E_displayBufferPixels(myBitmap);
-    }
-}
 
 
 

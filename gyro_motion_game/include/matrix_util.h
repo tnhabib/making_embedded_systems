@@ -6,7 +6,6 @@ void fillLeftRectBuffer(unsigned char*bitmap, int bitmap_size);
 void fillTopRectBuffer(unsigned char*bitmap, int bitmap_size);
 void fillBottomRectBuffer(unsigned char*bitmap, int bitmap_size);
 void clearMatrixDisplay();
-void playSequenceLoop();
 void drawGraphic(int direction);
 void animateX();
 void animateSmiley();
